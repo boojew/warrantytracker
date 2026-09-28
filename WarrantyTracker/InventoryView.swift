@@ -2,7 +2,6 @@ import SwiftUI
 import SwiftData
 
 struct InventoryView: View {
-    @Environment(\.modelContext) private var context
     @Query(sort: \Item.createdAt, order: .reverse) private var items: [Item]
     @State private var selectedID: UUID?
     @State private var showingAdd = false
@@ -33,11 +32,6 @@ struct InventoryView: View {
                 Tab("Items", systemImage: "shippingbox") {
                     NavigationStack {
                         inventoryList
-                            .navigationDestination(for: UUID.self) { id in
-                                if let item = items.first(where: { $0.id == id }) {
-                                    ItemDetailView(item: item)
-                                }
-                            }
                     }
                 }
                 Tab("Settings", systemImage: "gearshape") {
@@ -51,13 +45,28 @@ struct InventoryView: View {
         }
     }
 
-    private var inventoryList: some View {
+    @ViewBuilder
+    private var platformList: some View {
+        #if os(macOS)
         List(selection: $selectedID) {
             ForEach(visibleItems) { item in
                 NavigationLink(value: item.id) { ItemRow(item: item) }
                     .tag(item.id)
             }
         }
+        #else
+        List(visibleItems) { item in
+            NavigationLink {
+                ItemDetailView(item: item)
+            } label: {
+                ItemRow(item: item)
+            }
+        }
+        #endif
+    }
+
+    private var inventoryList: some View {
+        platformList
         .overlay {
             if items.isEmpty {
                 ContentUnavailableView {

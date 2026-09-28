@@ -7,8 +7,10 @@ final class InventoryUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["--ui-test-store", UUID().uuidString]
         app.launch()
+        app.activate()
         XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 10))
-        app.buttons["emptyAddItem"].click()
+        // Exercise the native New Item shortcut as well as the editor controls.
+        app.typeKey("n", modifierFlags: .command)
         let name = app.textFields["itemName"]
         XCTAssertTrue(name.waitForExistence(timeout: 5))
         name.click()
@@ -25,19 +27,23 @@ final class InventoryUITests: XCTestCase {
         name.typeKey("a", modifierFlags: .command)
         name.typeText("Unsaved name")
         app.buttons["Cancel"].click()
-        XCTAssertFalse(app.staticTexts["Unsaved name"].exists)
         app.buttons["editItem"].click()
+        XCTAssertEqual(name.value as? String, "Living room TV")
         name.click()
         name.typeKey("a", modifierFlags: .command)
         name.typeText("Bedroom TV")
         app.buttons["saveItem"].click()
         app.terminate()
         app.launch()
-        let row = app.staticTexts["Bedroom TV"].firstMatch
+        app.activate()
+        let row = app.outlines.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Bedroom TV")).firstMatch
         XCTAssertTrue(row.waitForExistence(timeout: 10))
         row.click()
         XCTAssertTrue(app.buttons["editItem"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["Costco"].firstMatch.exists)
+        app.buttons["editItem"].click()
+        XCTAssertEqual(app.textFields["retailer"].value as? String, "Costco")
+        XCTAssertEqual(app.textFields["price"].value as? String, "999.99")
+        app.buttons["Cancel"].click()
         let screenshot = XCTAttachment(screenshot: app.screenshot())
         screenshot.name = "Saved item after relaunch"
         screenshot.lifetime = .keepAlways

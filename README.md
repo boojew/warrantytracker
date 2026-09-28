@@ -38,14 +38,17 @@ Dates are calendar days, not timestamps. The entered end date is inclusive. Pric
 
 ## Automated checks
 
-The Mac scheme contains Swift Testing unit/integration tests and an XCTest UI workflow. The UI test uses a separate on-disk store so relaunch tests do not affect your inventory.
+The Mac scheme contains seven Swift Testing unit/integration tests and an XCTest UI workflow. The iOS scheme includes an add/relaunch/detail UI test. UI tests use separate on-disk stores so relaunch tests do not affect your inventory.
 
 ```sh
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac test
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -destination 'generic/platform=iOS Simulator' -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
+xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0' -derivedDataPath build/ios -parallel-testing-enabled NO test
 ```
 
 UI tests may require permission for Xcode's test runner to control the Mac. Test stores are inside the app's local Application Support/UITests directory. Unit-test stores are temporary and removed by the tests.
+
+Use a simulator device name and OS version installed on your Mac. An iOS 26.0 runtime and iPhone 17 Pro simulator were installed and used for this milestone. The Mac UI test also exercises Command-N to create an item.
 
 ## Structure
 

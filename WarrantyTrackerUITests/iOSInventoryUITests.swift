@@ -24,8 +24,10 @@ final class iOSInventoryUITests: XCTestCase {
         XCTAssertTrue(title.waitForExistence(timeout: 10) || row.waitForExistence(timeout: 5))
         if title.exists { title.tap() } else { row.tap() }
         XCTAssertTrue(app.buttons["editItem"].waitForExistence(timeout: 5))
-        XCTAssertTrue(app.staticTexts["Best Buy"].exists)
-        XCTAssertTrue(app.staticTexts["End date unknown"].exists)
+        let store = app.descendants(matching: .any)["purchaseStore"]
+        XCTAssertTrue("\(store.label) \(store.value ?? "")".contains("Best Buy"))
+        let status = app.descendants(matching: .any)["coverageStatus"]
+        XCTAssertTrue("\(status.label) \(status.value ?? "")".contains("End date unknown"))
         let screenshot = XCTAttachment(screenshot: app.screenshot())
         screenshot.name = "iPhone saved purchase"
         screenshot.lifetime = .keepAlways

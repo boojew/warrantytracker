@@ -28,6 +28,8 @@ struct ItemDetailView: View {
             }
             Section("Purchase") {
                 LabeledContent("Store", value: item.retailer.isEmpty ? "Not entered" : item.retailer)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("purchaseStore")
                 LabeledContent("Country", value: Locale.current.localizedString(forRegionCode: item.countryCode) ?? item.countryCode)
                 LabeledContent("Pre-tax price", value: Money.label(item.priceAmount, currency: item.currencyCode))
                 LabeledContent("Purchased on", value: CalendarDay.label(item.purchasedOn))
@@ -35,6 +37,8 @@ struct ItemDetailView: View {
             }
             Section {
                 LabeledContent("Status", value: CoverageStatus.manufacturer(end: item.manufacturerCoverage?.endsOn).label)
+                    .accessibilityElement(children: .combine)
+                    .accessibilityIdentifier("coverageStatus")
                 LabeledContent("Covered through", value: CalendarDay.label(item.manufacturerCoverage?.endsOn))
             } header: { Text("Manufacturer warranty") } footer: {
                 Text("Dates are entered by you. Keep your warranty documents to confirm the terms and exclusions.")
@@ -67,7 +71,9 @@ struct ItemDetailView: View {
         do {
             context.delete(item)
             try context.save()
+            #if os(iOS)
             dismiss()
+            #endif
         } catch {
             context.rollback()
             errorMessage = error.localizedDescription
