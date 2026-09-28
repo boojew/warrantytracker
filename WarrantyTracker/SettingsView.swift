@@ -2,14 +2,25 @@ import SwiftUI
 import SwiftData
 
 struct SettingsView: View {
+    @State private var section = 0
     var body: some View {
         #if os(macOS)
-        TabView {
-            DefaultsView().tabItem { Label("General", systemImage: "gearshape") }
-            NavigationStack { CardsView() }.tabItem { Label("Cards", systemImage: "creditcard") }
-            NavigationStack { organization }.tabItem { Label("Organization", systemImage: "tag") }
+        VStack(spacing: 0) {
+            Picker("Settings section", selection: $section) {
+                Text("General").tag(0)
+                Text("Cards").tag(1)
+                Text("Organization").tag(2)
+            }.pickerStyle(.segmented).padding()
+            Divider()
+            NavigationStack {
+                switch section {
+                case 1: CardsView()
+                case 2: organization
+                default: DefaultsView().navigationTitle("General")
+                }
+            }.id(section)
         }
-        .padding().frame(width: 620, height: 600)
+        .frame(width: 620, height: 600)
         #else
         List {
             NavigationLink("Purchase defaults") { DefaultsView().navigationTitle("Purchase defaults") }
@@ -40,6 +51,7 @@ struct CatalogView: View {
     @State private var showArchived = false
     @State private var name = ""
     @State private var error: String?
+    @State private var editingError: String?
 
     var body: some View {
         List {
@@ -60,11 +72,13 @@ struct CatalogView: View {
                 .font(.footnote).foregroundStyle(.secondary)
         }
         .navigationTitle(kind.label)
-        .toolbar {
-            Button("Add Entry", systemImage: "plus") {
-                editing = nil; name = ""; showingEditor = true
-            }.accessibilityIdentifier("addCatalogEntry")
+        #if os(macOS)
+        .safeAreaInset(edge: .bottom) {
+            HStack { addButton; Spacer() }.padding().background(.bar)
         }
+        #else
+        .toolbar { addButton }
+        #endif
         .sheet(isPresented: $showingEditor) {
             NavigationStack {
                 Form { TextField("Name", text: $name).accessibilityIdentifier("catalogName") }
@@ -77,7 +91,7 @@ struct CatalogView: View {
                                 do {
                                     try Catalog.save(name: name, kind: kind, entry: editing, in: context)
                                     showingEditor = false
-                                } catch { context.rollback(); self.error = error.localizedDescription }
+                                } catch { context.rollback(); editingError = error.localizedDescription }
                             }.accessibilityIdentifier("saveCatalogEntry")
                         }
                     }
@@ -85,8 +99,14 @@ struct CatalogView: View {
             #if os(macOS)
             .frame(width: 400, height: 180)
             #endif
-            .formError($error)
+            .formError($editingError)
         }
         .formError($error)
     }
+    private var addButton: some View {
+        Button("Add Entry", systemImage: "plus") {
+            editing = nil; name = ""; showingEditor = true
+        }.accessibilityIdentifier("addCatalogEntry")
+    }
+
 }

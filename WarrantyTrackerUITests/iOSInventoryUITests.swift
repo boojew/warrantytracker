@@ -33,4 +33,64 @@ final class iOSInventoryUITests: XCTestCase {
         screenshot.lifetime = .keepAlways
         add(screenshot)
     }
+
+    @MainActor
+    func testCardAndMonthlyCoverage() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["--ui-test-store", UUID().uuidString]
+        app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["Credit Cards"].tap()
+        app.buttons["addCard"].tap()
+        for (id, value) in [("cardNickname", "Travel"), ("cardBank", "Example Bank"),
+                            ("cardProduct", "Privilege"), ("cardFirstFour", "1234"), ("cardLastFour", "5678")] {
+            let field = app.textFields[id]
+            if !field.isHittable { app.swipeUp() }
+            field.tap(); field.typeText(value)
+        }
+        app.buttons["saveCard"].tap()
+        let card = app.staticTexts["Travel"].firstMatch
+        XCTAssertTrue(card.waitForExistence(timeout: 5))
+        card.tap()
+        XCTAssertTrue(app.staticTexts["Current card"].exists)
+        app.buttons["updateCard"].tap()
+        let lastFour = app.textFields["cardLastFour"]
+        if !lastFour.isHittable { app.swipeUp() }
+        lastFour.tap()
+        lastFour.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 4) + "9012")
+        app.buttons["saveCard"].tap()
+        XCTAssertTrue(app.staticTexts["Previous card"].waitForExistence(timeout: 5))
+        app.tabBars.buttons["Items"].tap()
+        app.buttons["addItem"].tap()
+        app.textFields["itemName"].tap()
+        app.textFields["itemName"].typeText("Apple Watch")
+        app.buttons["purchaseCardPicker"].tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS %@ AND NOT label CONTAINS %@", "9012", "Purchased with")).firstMatch.tap()
+        app.buttons["saveItem"].tap()
+        app.staticTexts["Apple Watch"].firstMatch.tap()
+        let addCoverage = app.buttons["addCoverage"]
+        if !addCoverage.isHittable { app.swipeUp() }
+        addCoverage.tap()
+        app.textFields["coverageName"].tap()
+        app.textFields["coverageName"].typeText("AppleCare+")
+        app.buttons["coverageDuration"].tap()
+        app.buttons["Ongoing / monthly"].tap()
+        app.buttons["saveCoverage"].tap()
+        if !app.staticTexts["AppleCare+"].isHittable { app.swipeUp() }
+        XCTAssertTrue(app.staticTexts["AppleCare+"].exists)
+        XCTAssertTrue(app.staticTexts["Ongoing / monthly"].exists)
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "iPhone multiple coverage records"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+        app.terminate(); app.launch()
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["Credit Cards"].tap()
+        app.staticTexts["Travel"].firstMatch.tap()
+        XCTAssertTrue(app.staticTexts["Apple Watch"].waitForExistence(timeout: 5))
+        app.staticTexts["Apple Watch"].tap()
+        XCTAssertTrue(app.buttons["editItem"].waitForExistence(timeout: 5))
+    }
+
 }

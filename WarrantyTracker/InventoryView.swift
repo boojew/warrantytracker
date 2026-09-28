@@ -22,7 +22,7 @@ struct InventoryView: View {
                     .navigationSplitViewColumnWidth(min: 270, ideal: 320, max: 420)
             } detail: {
                 if let item = items.first(where: { $0.id == selectedID }) {
-                    NavigationStack { ItemDetailView(item: item) }
+                    NavigationStack { ItemDetailView(item: item) }.id(item.id)
                 } else {
                     ContentUnavailableView("Your warranties, in one place", systemImage: "shippingbox",
                                            description: Text("Select an item to see its purchase details and warranty."))

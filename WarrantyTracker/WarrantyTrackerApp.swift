@@ -17,7 +17,9 @@ struct WarrantyTrackerApp: App {
                 let identifier = arguments[index + 1].filter { $0.isLetter || $0.isNumber || $0 == "-" }
                 storeURL = directory.appending(path: "\(identifier).store")
             }
-            container = try Persistence.container(url: storeURL)
+            // Hosted unit tests launch the app too. Keep their host away from real inventory.
+            let isolatedTestHost = ProcessInfo.processInfo.environment["WARRANTYTRACKER_TEST_HOST"] == "1"
+            container = try Persistence.container(url: storeURL, inMemory: isolatedTestHost && storeURL == nil)
             startupError = nil
         } catch {
             container = nil

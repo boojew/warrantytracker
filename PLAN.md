@@ -2,6 +2,8 @@
 
 Native iPhone and Mac app, iOS/macOS 26 minimum, English UI first. Default Canada/CAD with editable per-purchase country/currency. Public App Store distribution is the eventual goal. Local storage and private iCloud are the only planned hosted inventory storage; no custom server or third-party AI service.
 
+Milestones 1 and 2 are implemented. See `VERIFICATION.md` for checks and `README.md` for the hands-on verification steps. Milestone 3 (attachments) is next.
+
 ## Milestones
 
 1. **Local foundation:** runnable Mac/iPhone app, basic item details, manual manufacturer end date, durable SwiftData storage.

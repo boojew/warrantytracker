@@ -25,8 +25,17 @@ struct CardsView: View {
             if accounts.contains(where: \.isArchived) { Toggle("Show archived cards", isOn: $showArchived) }
         }
         .navigationTitle("Credit Cards")
-        .toolbar { Button("Add Card", systemImage: "plus") { adding = true }.accessibilityIdentifier("addCard") }
+        #if os(macOS)
+        .safeAreaInset(edge: .bottom) {
+            HStack { addButton; Spacer() }.padding().background(.bar)
+        }
+        #else
+        .toolbar { addButton }
+        #endif
         .sheet(isPresented: $adding) { CardEditorView() }
+    }
+    private var addButton: some View {
+        Button("Add Card", systemImage: "plus") { adding = true }.accessibilityIdentifier("addCard")
     }
 }
 
@@ -67,9 +76,18 @@ struct CardDetailView: View {
             } footer: { Text("Archived cards keep their purchase history and coverage records. Updating the card creates a new version when its details change.") }
         }
         .navigationTitle(account.nickname)
-        .toolbar { Button("Update Card", systemImage: "pencil") { editing = true }.accessibilityIdentifier("updateCard") }
+        #if os(macOS)
+        .safeAreaInset(edge: .bottom) {
+            HStack { updateButton; Spacer() }.padding().background(.bar)
+        }
+        #else
+        .toolbar { updateButton }
+        #endif
         .sheet(isPresented: $editing) { CardEditorView(account: account) }
         .formError($error)
+    }
+    private var updateButton: some View {
+        Button("Update Card", systemImage: "pencil") { editing = true }.accessibilityIdentifier("updateCard")
     }
 }
 

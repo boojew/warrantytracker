@@ -104,9 +104,7 @@ struct ItemDetailView: View {
         do {
             context.delete(item)
             try context.save()
-            #if os(iOS)
             dismiss()
-            #endif
         } catch {
             context.rollback()
             errorMessage = error.localizedDescription

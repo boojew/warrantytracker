@@ -52,7 +52,7 @@ xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -desti
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0' -derivedDataPath build/ios -parallel-testing-enabled NO test
 ```
 
-UI tests may require permission for Xcode's test runner to control the Mac. Test stores are inside the app's local Application Support/UITests directory. Unit-test stores are temporary and removed by the tests.
+UI tests may require permission for Xcode's test runner to control the Mac. Test stores are inside the app's local Application Support/UITests directory. Unit-test stores are temporary and removed by the tests; their host app uses a separate in-memory store.
 
 Use a simulator device name and OS version installed on your Mac. An iOS 26.0 runtime and iPhone 17 Pro simulator were installed and used for this milestone. The Mac UI test also exercises Command-N to create an item.
 

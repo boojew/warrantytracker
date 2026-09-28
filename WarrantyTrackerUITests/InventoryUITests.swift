@@ -58,6 +58,10 @@ final class InventoryUITests: XCTestCase {
         screenshot.name = "Saved item after relaunch"
         screenshot.lifetime = .keepAlways
         add(screenshot)
+        app.buttons["Remove"].firstMatch.click()
+        app.sheets.buttons["Remove Coverage"].click()
+        XCTAssertEqual(app.buttons.matching(identifier: "Edit Coverage").count, 1)
+        XCTAssertTrue(app.staticTexts["Monthly protection"].exists)
         app.buttons["deleteItem"].click()
         app.buttons.matching(NSPredicate(format: "label == %@ AND identifier != %@", "Delete Item", "deleteItem")).firstMatch.click()
         XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 5))
@@ -65,4 +69,43 @@ final class InventoryUITests: XCTestCase {
         app.launch()
         XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 10))
     }
+
+    @MainActor
+    func testSettingsCardsAndOrganization() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["--ui-test-store", UUID().uuidString]
+        app.launch(); app.activate()
+        XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 10))
+        app.typeKey(",", modifierFlags: .command)
+        let cards = app.radioButtons["Cards"]
+        XCTAssertTrue(cards.waitForExistence(timeout: 5))
+        cards.click()
+        app.buttons["addCard"].click()
+        for (id, value) in [("cardNickname", "Everyday"), ("cardBank", "Example Bank"),
+                            ("cardProduct", "Privilege"), ("cardFirstFour", "1234"), ("cardLastFour", "5678")] {
+            app.textFields[id].click(); app.textFields[id].typeText(value)
+        }
+        app.buttons["saveCard"].click()
+        XCTAssertTrue(app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Everyday")).firstMatch.waitForExistence(timeout: 5))
+        app.radioButtons["Organization"].click()
+        app.buttons["Usage locations"].click()
+        app.buttons["addCatalogEntry"].click()
+        app.textFields["catalogName"].click()
+        app.textFields["catalogName"].typeText("Basement")
+        app.buttons["saveCatalogEntry"].click()
+        XCTAssertTrue(app.buttons["Basement"].waitForExistence(timeout: 5))
+        app.buttons["addCatalogEntry"].click()
+        app.textFields["catalogName"].click()
+        app.textFields["catalogName"].typeText("basement")
+        app.buttons["saveCatalogEntry"].click()
+        XCTAssertTrue(app.sheets.buttons["OK"].waitForExistence(timeout: 5))
+        app.sheets.buttons["OK"].click()
+        app.buttons["Cancel"].click()
+        let screenshot = XCTAttachment(screenshot: app.screenshot())
+        screenshot.name = "Mac organization settings"
+        screenshot.lifetime = .keepAlways
+        add(screenshot)
+    }
+
 }

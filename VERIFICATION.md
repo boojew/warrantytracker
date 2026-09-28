@@ -1,27 +1,32 @@
-# Milestone 1 verification
+# Milestone 2 verification
 
-Verified September 27, 2026 using the installed Xcode 27.0 beta (27A5209h).
+Verified September 28, 2026 with Xcode 27.0 beta (27A5209h), macOS 27.2 on Apple silicon, and an iPhone 17 Pro simulator running iOS 26.0.
 
 | Check | Result |
 | --- | --- |
-| Native Mac build | Passed on Apple silicon, macOS 27.2 |
-| iPhone Simulator build | Passed |
-| Seven Swift Testing tests | Passed: exact price parsing, calendar days/leap years, inclusive warranty end dates, disk-store reopening, relationship updates/cascade deletion, draft isolation, defaults |
-| Mac UI workflow | Passed: Command-N, add, cancel an edit, save an edit, relaunch, verify saved name/retailer/price, delete, relaunch with empty inventory |
-| iPhone UI workflow | Passed on iPhone 17 Pro / iOS 26.0: add, save, relaunch, open detail, verify retailer and unknown warranty state |
-| Visual review | Mac empty/editor/detail screens and iPhone detail screenshot inspected |
-| Whitespace validation | `git diff --check` passed |
+| Native Mac and iPhone Simulator builds | Passed |
+| 12 Swift Testing data/rules tests | Passed |
+| Existing-store upgrade | Created a real V1 disk store, upgraded to V2, reopened twice; retained IDs, purchase fields, warranty relationship/dates/provider and custom defaults |
+| Card history | Changed card digits, reopened the disk store, checked old/new purchase links, original card coverage, account rename/archive and deletion behavior |
+| Coverage rules | Checked unknown, ongoing, future start, inclusive cancellation day, invalid dates and independent coverage terms |
+| Catalog/search rules | Checked one-time defaults, case-insensitive duplicate rejection, archive/rename links, all-field vs Store scope, amount/notes and historical card-digit search |
+| Mac inventory UI | Passed add/edit/cancel/relaunch, adding monthly coverage, retaining saved details, removing one coverage while retaining the other, and deleting an item |
+| Mac Settings UI | Passed card creation, adding a usage location and showing a duplicate-name error in the editor |
+| iPhone UI | Both workflows passed: add/relaunch/detail and card creation/replacement, purchase linking, monthly coverage, and navigating from a card to its purchase after relaunch |
+| Visual review | Mac multiple-coverage detail, organization settings and iPhone purchase/coverage screenshots inspected |
 
-The data tests most recently passed in `build/Milestone1-Mac-Final.xcresult`. After correcting a Mac accessibility selector, the UI workflow passed in `build/Milestone1-MacUI-Complete.xcresult`. The iPhone workflow passed in `build/Milestone1-iOS-Verified.xcresult`. Result bundles and synthetic screenshots stay in the ignored build directory.
+All 14 Mac data/UI checks passed in `build/Milestone2-Mac-Final.xcresult`. The final Mac Settings selector was then verified in `build/Milestone2-Settings-Final.xcresult`. iPhone results: `build/Milestone2-iOS-First.xcresult`; the final shared source also passed an iPhone Simulator build. These result bundles and synthetic screenshots are ignored by Git.
 
-The simulator test found and verified a fix for an actual iPhone navigation problem: a list using the Mac sidebar selection binding selected rows without opening details. iPhone now uses explicit navigation destinations; Mac keeps sidebar selection.
+The tests found and fixed case-sensitive duplicate catalog names. Mac Settings uses a native segmented section selector and clearly labelled Add/Update buttons at the bottom of its pages. The tests use the actual native accessibility controls, including scoping confirmation buttons to sheets to exclude duplicate Touch Bar actions.
 
-The Mac test uses the app's Command-N shortcut. Xcode's default notification interruption handler incorrectly treated a desktop Calendar widget as a banner when clicking the empty-state button; the desktop configuration was not changed. Direct interaction with the empty-state button worked.
+## Scope and limits
 
-## Current limits
+- Milestone 2 remains local-only. Attachments are milestone 3; private iCloud sync completes the first MVP in milestone 4. AI and share extensions follow later.
+- Card number fields accept exactly four ASCII digits each. No full-number or security-code field exists. Replacing card details creates a new version; nickname changes do not. Historical coverage is never recalculated when a card or purchase changes.
+- Coverage terms remain manual. Ongoing does not verify payment or eligibility. Cancellation records the final covered day, inclusive.
+- Archived cards and classifications retain existing links. Archiving is reversible. Removing coverage and deleting items require confirmation.
+- Physical iPhone install and macOS 26 runtime behavior still require device testing. Deployment remains iOS/macOS 26; the simulator exercises iOS 26.0.
+- The beta toolchain reports debugger-version diagnostics and an internal thread-priority warning during Mac UI testing. These did not prevent the verified workflows from passing.
+- UI test data uses isolated disk stores. The hosted unit-test app uses an in-memory store via a test-only scheme environment setting; data tests create their own temporary stores. The tests do not modify the user's inventory. No user receipts, real card information, credentials or screenshots are committed.
 
-- Local storage only. iCloud, cards, multiple editable coverage records, attachments, AI, and share extensions belong to later milestones.
-- Physical iPhone signing/install has not been verified; select your development team in Xcode before running on your phone.
-- macOS 26 itself was not available for runtime testing; deployment is set to 26.0, with execution checked on macOS 27.2.
-- The beta toolchain logs debugger-version diagnostics and an internal thread-priority warning during Mac UI testing. Tests passed; verify again with stable Xcode before public distribution.
-- Global command-line tool selection was not changed. Shell builds used `DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer`.
+Milestone 1 verification history remains in Git.
