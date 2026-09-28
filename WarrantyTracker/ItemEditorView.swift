@@ -30,6 +30,7 @@ struct ItemEditorView: View {
                 Section("Purchase") {
                     TextField("Store / retailer", text: $draft.retailer)
                         .accessibilityIdentifier("retailer")
+                    CardVersionPicker(selection: $draft.purchaseCard)
                     CountryPicker(selection: $draft.countryCode)
                     CurrencyPicker(selection: $draft.currencyCode)
                     TextField("Pre-tax price", text: $draft.price)
@@ -45,6 +46,7 @@ struct ItemEditorView: View {
                     }
                 }
 
+                if item == nil {
                 Section {
                     Toggle("End date known", isOn: $draft.hasWarrantyEnd)
                         .accessibilityIdentifier("warrantyEndKnown")
@@ -54,6 +56,17 @@ struct ItemEditorView: View {
                     }
                 } header: { Text("Manufacturer warranty") } footer: {
                     Text("Enter the end date from your warranty documents. An unknown date does not mean lifetime coverage.")
+                }
+
+                }
+
+                Section("Organization") {
+                    ClassificationPicker(title: "Category", kind: .category, selection: $draft.category)
+                    ClassificationPicker(title: "Used at", kind: .location, selection: $draft.location)
+                    NavigationLink { TagPicker(selection: $draft.tags) } label: {
+                        LabeledContent("Tags", value: draft.tags.isEmpty ? "None" : draft.tags.map(\.name).joined(separator: ", "))
+                    }
+                    Text("Manage cards and these lists in Settings.").font(.footnote).foregroundStyle(.secondary)
                 }
 
                 Section("Notes") {

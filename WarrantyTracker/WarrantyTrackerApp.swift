@@ -46,7 +46,7 @@ struct WarrantyTrackerApp: App {
         #if os(macOS)
         Settings {
             if let container {
-                DefaultsView().modelContainer(container).frame(width: 460, height: 300)
+                SettingsView().modelContainer(container)
             }
         }
         #endif

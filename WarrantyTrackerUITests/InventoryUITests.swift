@@ -33,6 +33,15 @@ final class InventoryUITests: XCTestCase {
         name.typeKey("a", modifierFlags: .command)
         name.typeText("Bedroom TV")
         app.buttons["saveItem"].click()
+        // Add an independent ongoing plan through the native editor.
+        app.buttons["addCoverage"].click()
+        let planName = app.textFields["coverageName"]
+        XCTAssertTrue(planName.waitForExistence(timeout: 5))
+        planName.click(); planName.typeText("Monthly protection")
+        app.popUpButtons["coverageDuration"].click()
+        app.menuItems["Ongoing / monthly"].click()
+        app.buttons["saveCoverage"].click()
+        XCTAssertTrue(app.staticTexts["Monthly protection"].waitForExistence(timeout: 5))
         app.terminate()
         app.launch()
         app.activate()
@@ -40,6 +49,7 @@ final class InventoryUITests: XCTestCase {
         XCTAssertTrue(row.waitForExistence(timeout: 10))
         row.click()
         XCTAssertTrue(app.buttons["editItem"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["Monthly protection"].waitForExistence(timeout: 5))
         app.buttons["editItem"].click()
         XCTAssertEqual(app.textFields["retailer"].value as? String, "Costco")
         XCTAssertEqual(app.textFields["price"].value as? String, "999.99")

@@ -6,6 +6,9 @@ struct ItemDetailView: View {
     @Environment(\.dismiss) private var dismiss
     let item: Item
     @State private var showingEdit = false
+    @State private var addingCoverage = false
+    @State private var editingCoverage: Coverage?
+    @State private var removingCoverage: Coverage?
     @State private var confirmingDelete = false
     @State private var errorMessage: String?
 
@@ -35,13 +38,31 @@ struct ItemDetailView: View {
                 LabeledContent("Purchased on", value: CalendarDay.label(item.purchasedOn))
                 LabeledContent("Serial number", value: item.serialNumber.isEmpty ? "Not entered" : item.serialNumber)
             }
+            if let card = item.purchaseCard, let account = card.account {
+                Section("Purchased with") {
+                    NavigationLink { CardDetailView(account: account) } label: { Text(card.label) }
+                }
+            }
             Section {
-                LabeledContent("Status", value: CoverageStatus.manufacturer(end: item.manufacturerCoverage?.endsOn).label)
-                    .accessibilityElement(children: .combine)
-                    .accessibilityIdentifier("coverageStatus")
-                LabeledContent("Covered through", value: CalendarDay.label(item.manufacturerCoverage?.endsOn))
-            } header: { Text("Manufacturer warranty") } footer: {
-                Text("Dates are entered by you. Keep your warranty documents to confirm the terms and exclusions.")
+                ForEach(item.orderedCoverages) { coverage in
+                    VStack(alignment: .leading) {
+                        CoverageSummary(coverage: coverage)
+                        HStack {
+                            Button("Edit Coverage") { editingCoverage = coverage }
+                            Spacer()
+                            Button("Remove", role: .destructive) { removingCoverage = coverage }
+                        }.buttonStyle(.borderless)
+                    }
+                }
+                Button("Add Coverage", systemImage: "plus") { addingCoverage = true }
+                    .accessibilityIdentifier("addCoverage")
+            } header: { Text("Warranty coverage") } footer: {
+                Text("Each plan is recorded separately. Dates and terms are entered by you; consult your policy documents to confirm coverage.")
+            }
+            Section("Organization") {
+                LabeledContent("Category", value: item.category?.name ?? "Not set")
+                LabeledContent("Used at", value: item.location?.name ?? "Not set")
+                LabeledContent("Tags", value: (item.tags ?? []).map(\.name).sorted().joined(separator: ", "))
             }
             if !item.notes.isEmpty {
                 Section("Notes") { Text(item.notes).textSelection(.enabled) }
@@ -58,6 +79,18 @@ struct ItemDetailView: View {
             }
         }
         .sheet(isPresented: $showingEdit) { ItemEditorView(item: item) }
+        .sheet(isPresented: $addingCoverage) { CoverageEditorView(item: item) }
+        .sheet(item: $editingCoverage) { CoverageEditorView(item: item, coverage: $0) }
+        .confirmationDialog("Remove this coverage?", isPresented: Binding(get: { removingCoverage != nil }, set: { if !$0 { removingCoverage = nil } }), titleVisibility: .visible) {
+            Button("Remove Coverage", role: .destructive) {
+                guard let coverage = removingCoverage else { return }
+                context.delete(coverage)
+                item.updatedAt = Date()
+                do { try context.save() } catch { context.rollback(); errorMessage = error.localizedDescription }
+                removingCoverage = nil
+            }
+            Button("Cancel", role: .cancel) { removingCoverage = nil }
+        }
         .confirmationDialog("Delete \(item.name)?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete Item", role: .destructive, action: delete)
             Button("Cancel", role: .cancel) {}

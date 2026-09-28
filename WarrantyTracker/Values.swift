@@ -71,7 +71,7 @@ enum Money {
 }
 
 enum CoverageStatus {
-    case unknown, recorded, expired
+    case unknown, recorded, expired, ongoing, cancelled, upcoming, ending
 
     static func manufacturer(end: String?, today: String = CalendarDay.encode(Date())) -> Self {
         guard let end else { return .unknown }
@@ -83,6 +83,10 @@ enum CoverageStatus {
         case .unknown: "End date unknown"
         case .recorded: "Warranty recorded"
         case .expired: "Warranty expired"
+        case .ongoing: "Ongoing — user recorded"
+        case .cancelled: "Cancelled"
+        case .upcoming: "Starts in the future"
+        case .ending: "Cancellation scheduled"
         }
     }
 }
@@ -100,11 +104,17 @@ struct ItemDraft {
     var notes = ""
     var hasWarrantyEnd = false
     var warrantyEnd = Date()
+    var purchaseCard: CardVersion?
+    var category: Classification?
+    var location: Classification?
+    var tags: [Classification] = []
+    private(set) var createsInitialCoverage = true
 
     init(item: Item? = nil, defaults: Preferences? = nil) {
         countryCode = defaults?.countryCode ?? "CA"
         currencyCode = defaults?.currencyCode ?? "CAD"
         guard let item else { return }
+        createsInitialCoverage = false
         name = item.name
         manufacturer = item.manufacturer
         retailer = item.retailer
@@ -113,6 +123,10 @@ struct ItemDraft {
         price = Money.editable(item.priceAmount)
         serialNumber = item.serialNumber
         notes = item.notes
+        purchaseCard = item.purchaseCard
+        category = item.category
+        location = item.location
+        tags = item.tags ?? []
         if let day = item.purchasedOn, let date = CalendarDay.decode(day) {
             hasPurchaseDate = true
             purchaseDate = date
@@ -126,7 +140,7 @@ struct ItemDraft {
     func validate() throws {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw EntryError.missingName }
         _ = try Money.parse(price)
-        if hasPurchaseDate && hasWarrantyEnd && CalendarDay.encode(warrantyEnd) < CalendarDay.encode(purchaseDate) {
+        if createsInitialCoverage && hasPurchaseDate && hasWarrantyEnd && CalendarDay.encode(warrantyEnd) < CalendarDay.encode(purchaseDate) {
             throw EntryError.warrantyBeforePurchase
         }
     }
@@ -142,12 +156,16 @@ struct ItemDraft {
         item.purchasedOn = hasPurchaseDate ? CalendarDay.encode(purchaseDate) : nil
         item.serialNumber = serialNumber.trimmingCharacters(in: .whitespacesAndNewlines)
         item.notes = notes
+        item.purchaseCard = purchaseCard
+        item.category = category
+        item.location = location
+        item.tags = tags
         item.updatedAt = Date()
-        let coverage = item.manufacturerCoverage ?? Coverage()
-        if coverage.item == nil {
-            item.coverages = (item.coverages ?? []) + [coverage]
-            coverage.item = item
-        }
+        // Editing purchase details must never silently rewrite confirmed warranty records.
+        guard createsInitialCoverage && (item.coverages ?? []).isEmpty else { return }
+        let coverage = Coverage()
+        item.coverages = [coverage]
+        coverage.item = item
         coverage.provider = item.manufacturer
         coverage.startsOn = item.purchasedOn
         coverage.endsOn = hasWarrantyEnd ? CalendarDay.encode(warrantyEnd) : nil

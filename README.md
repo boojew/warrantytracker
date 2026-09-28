@@ -4,7 +4,7 @@ A native SwiftUI warranty inventory for iPhone and Mac. Development happens on `
 
 ## Current milestone
 
-Milestone 1: local inventory. Add, edit, delete, and search items; record purchase details and a manufacturer warranty end date; change the Canada/CAD defaults. All data stays on the device. No card details, attachments, AI, or iCloud sync are implemented yet.
+Milestone 2: local inventory with multiple independent warranties, optional credit cards with replacement history, categories/tags/usage locations, and search by field. Canada/CAD defaults remain editable. Existing milestone-1 data upgrades automatically. Attachments, AI, and iCloud sync are not implemented yet.
 
 Requires iOS 26+ / macOS 26+ and Xcode 26+ with the appropriate SDK. Use current stable Xcode for everyday development. This first implementation is being verified with the already-installed Xcode 27 beta.
 
@@ -23,22 +23,28 @@ export DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac build
 ```
 
-## Verify milestone 1 yourself
+## Verify milestone 2 yourself
 
-- Add a **Living room TV**, retailer **Costco**, price **999.99 CAD**, purchase date, and manufacturer end date. Check the detail view.
-- Quit and reopen. The item and its details should still be there.
-- Edit an item, then Cancel. Your original details should remain.
-- Save an edit, restart, and check that it persists.
-- Save an item with only a name. Its warranty must say **End date unknown**, not ongoing or lifetime.
-- Try an invalid price or a warranty end date before the purchase date. A clear error should appear without losing your draft.
-- Change defaults in Settings (Mac: Command-comma; iPhone: Settings tab). New items use the new defaults; existing items keep their original values.
-- Delete an item and confirm. Reopen the app and check that it is still gone.
+- Your milestone-1 items should still appear, with their original purchase details and warranty dates.
+- Open **Settings** (Mac: Command-comma; iPhone: Settings tab). Under **Cards**, add a synthetic card with first four **1234** and last four **5678**, bank, network, product name, and nickname. No full-number or security-code field exists.
+- Add a TV from Costco. Choose its purchase card, category, usage location and tags. Enter the manufacturer warranty end date from your own documents.
+- Open the TV and choose **Add Coverage**. Add a separate retailer plan with a fixed end date. Editing the item must not change either warranty.
+- Add a pool pump with a separate credit-card warranty. Enter its extension, limits and exclusions manually; no policy terms are inferred.
+- Add an Apple Watch and an **AppleCare+** coverage record with **Ongoing / monthly** duration. Record a cancellation with its final covered day. It shows cancellation scheduled through that day, then cancelled.
+- Add a Kobo with an unknown end date. It must say **End date unknown**, never lifetime or ongoing.
+- Update your card's last four digits to **9012** in Settings. Earlier purchases stay linked to **5678**. New purchases can use **9012**. Open the card to see purchases across both versions.
+- In Settings, add/rename/archive a tag or location. Renaming updates its linked items; archiving preserves existing links and removes the choice from new selections. Restore it using **Show archived entries**.
+- Search **Home**, then change **Search in** to **Store**. Results should include Home Depot but exclude an item matching only a Home location or name.
+- Quit and reopen. Check that the items, card history, organization and all coverage records remain.
+- Cancel an item/card/coverage edit and confirm that nothing changed. Remove one coverage record and confirm that other warranties remain. Deleting an item removes its coverages but keeps the card and category lists.
+
+Card and list management are in Settings. Cards are optional, and archiving a card keeps its history. Each warranty has independent dates; extensions are never automatically added together. These are your recorded terms, not verification of eligibility or payment.
 
 Dates are calendar days, not timestamps. The entered end date is inclusive. Prices are stored as exact decimal text; leave a price blank when unknown. Price entry accepts a decimal separator, without a currency symbol or thousands separators. Existing records never undergo currency conversion when defaults change.
 
 ## Automated checks
 
-The Mac scheme contains seven Swift Testing unit/integration tests and an XCTest UI workflow. The iOS scheme includes an add/relaunch/detail UI test. UI tests use separate on-disk stores so relaunch tests do not affect your inventory.
+The Mac scheme includes Swift Testing checks for prices/dates, on-disk schema migration, independent coverage, card replacement history, input validation, catalogs and scoped search, plus an XCTest UI workflow. The iOS scheme includes inventory and card/coverage UI workflows. UI tests use separate on-disk stores so relaunch tests do not affect your inventory.
 
 ```sh
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac test

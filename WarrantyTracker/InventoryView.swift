@@ -2,15 +2,16 @@ import SwiftUI
 import SwiftData
 
 struct InventoryView: View {
+    @Environment(\.modelContext) private var context
+    @State private var searchField: SearchField = .all
+    @State private var error: String?
     @Query(sort: \Item.createdAt, order: .reverse) private var items: [Item]
     @State private var selectedID: UUID?
     @State private var showingAdd = false
     @State private var search = ""
 
     private var visibleItems: [Item] {
-        guard !search.isEmpty else { return items }
-        return items.filter { [$0.name, $0.manufacturer, $0.retailer, $0.serialNumber, $0.notes]
-            .contains { $0.localizedStandardContains(search) } }
+        items.filter { InventorySearch.matches($0, query: search, field: searchField) }
     }
 
     var body: some View {
@@ -21,7 +22,7 @@ struct InventoryView: View {
                     .navigationSplitViewColumnWidth(min: 270, ideal: 320, max: 420)
             } detail: {
                 if let item = items.first(where: { $0.id == selectedID }) {
-                    ItemDetailView(item: item)
+                    NavigationStack { ItemDetailView(item: item) }
                 } else {
                     ContentUnavailableView("Your warranties, in one place", systemImage: "shippingbox",
                                            description: Text("Select an item to see its purchase details and warranty."))
@@ -35,11 +36,15 @@ struct InventoryView: View {
                     }
                 }
                 Tab("Settings", systemImage: "gearshape") {
-                    NavigationStack { DefaultsView().navigationTitle("Settings") }
+                    NavigationStack { SettingsView() }
                 }
             }
             #endif
         }
+        .task {
+            do { try Catalog.initialize(in: context) } catch { context.rollback(); self.error = error.localizedDescription }
+        }
+        .formError($error, title: "Unable to load settings")
         .sheet(isPresented: $showingAdd) {
             ItemEditorView { id in selectedID = id }
         }
@@ -83,6 +88,14 @@ struct InventoryView: View {
             }
         }
         .searchable(text: $search, prompt: "Search items")
+        .safeAreaInset(edge: .top, spacing: 0) {
+            Picker("Search in", selection: $searchField) {
+                ForEach(SearchField.allCases) { Text($0.label).tag($0) }
+            }
+            .accessibilityIdentifier("searchField")
+            .padding(.horizontal).padding(.vertical, 8)
+            .background(.bar)
+        }
         .navigationTitle("Items")
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -108,7 +121,7 @@ private struct ItemRow: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.name).font(.headline)
                 if !item.retailer.isEmpty { Text(item.retailer).font(.subheadline).foregroundStyle(.secondary) }
-                Text(CoverageStatus.manufacturer(end: item.manufacturerCoverage?.endsOn).label)
+                Text(item.orderedCoverages.isEmpty ? "No coverage recorded" : item.orderedCoverages.map { CoverageStatus.status(of: $0).label }.joined(separator: " · "))
                     .font(.caption).foregroundStyle(.secondary)
             }
             .padding(.vertical, 4)

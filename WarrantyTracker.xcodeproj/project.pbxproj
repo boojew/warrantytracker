@@ -4,6 +4,30 @@
 	classes = {};
 	objectVersion = 56;
 	objects = {
+		E1157BD903F1F30B6426DD8D = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
+		85CE17E87CC8F5CE4CC83091 = { isa = PBXBuildFile; fileRef = E1157BD903F1F30B6426DD8D; };
+		212060B9C139A64F42B69A67 = { isa = PBXBuildFile; fileRef = E1157BD903F1F30B6426DD8D; };
+		94FC6358B731981816001F76 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SchemaV2.swift"; sourceTree = "<group>"; };
+		7FAADB88B77B510A18D6FB51 = { isa = PBXBuildFile; fileRef = 94FC6358B731981816001F76; };
+		8E497AC7A533390779B3E814 = { isa = PBXBuildFile; fileRef = 94FC6358B731981816001F76; };
+		DF728DEB4C7E8754D313EFDE = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InventorySearch.swift"; sourceTree = "<group>"; };
+		76CB2FC045C7A24F61167282 = { isa = PBXBuildFile; fileRef = DF728DEB4C7E8754D313EFDE; };
+		67EDEAC275031786DD8C0048 = { isa = PBXBuildFile; fileRef = DF728DEB4C7E8754D313EFDE; };
+		190E86600B312C7DA50C282E = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FormSupport.swift"; sourceTree = "<group>"; };
+		3B19669463D0E690D6F7C24A = { isa = PBXBuildFile; fileRef = 190E86600B312C7DA50C282E; };
+		E5072D6D37AEFACB8D6DF01F = { isa = PBXBuildFile; fileRef = 190E86600B312C7DA50C282E; };
+		653E119771985BAF324902C0 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoverageRules.swift"; sourceTree = "<group>"; };
+		C53AAC25265F9F5ECCBBDD2E = { isa = PBXBuildFile; fileRef = 653E119771985BAF324902C0; };
+		143D3BD458BAF23D3F4A3208 = { isa = PBXBuildFile; fileRef = 653E119771985BAF324902C0; };
+		3FF6E7D7C28A1567304E7414 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoverageEditorView.swift"; sourceTree = "<group>"; };
+		ED0AA57D8BC815BFF8EBB3CE = { isa = PBXBuildFile; fileRef = 3FF6E7D7C28A1567304E7414; };
+		629BB3041AE32D2623E91780 = { isa = PBXBuildFile; fileRef = 3FF6E7D7C28A1567304E7414; };
+		B25918E9BF78135B777D6DA6 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Catalog.swift"; sourceTree = "<group>"; };
+		70EB7115145E86F76990EE01 = { isa = PBXBuildFile; fileRef = B25918E9BF78135B777D6DA6; };
+		51FC6CBD62F82B21C05A69D8 = { isa = PBXBuildFile; fileRef = B25918E9BF78135B777D6DA6; };
+		26CC1C5ED8D424DFDF1A778E = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CardsView.swift"; sourceTree = "<group>"; };
+		95FB3414279CFBC53AA1BFB5 = { isa = PBXBuildFile; fileRef = 26CC1C5ED8D424DFDF1A778E; };
+		8D3515C47673BDD87CCBF16C = { isa = PBXBuildFile; fileRef = 26CC1C5ED8D424DFDF1A778E; };
 		CB6D7F59C698D185094EA30B = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DefaultsView.swift"; sourceTree = "<group>"; };
 		A0E629A9C81FD8F224806541 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InventoryView.swift"; sourceTree = "<group>"; };
 		90EDE5C9464CF3701597110F = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ItemDetailView.swift"; sourceTree = "<group>"; };
@@ -13,7 +37,7 @@
 		907048FBEAB0D9FC15FF9485 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WarrantyTrackerApp.swift"; sourceTree = "<group>"; };
 		482966011B6DA41BE9E2D31E = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WarrantyTrackerTests.swift"; sourceTree = "<group>"; };
 		77E594EA1A903E02BB6E11B9 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "InventoryUITests.swift"; sourceTree = "<group>"; };
-		01A56490A3FF5797A24897C4 = { isa = PBXGroup; children = (CB6D7F59C698D185094EA30B, A0E629A9C81FD8F224806541, 90EDE5C9464CF3701597110F, 73F7024AD4730BD30A8BDB3B, AC27586DAB3DA9567AAD93F3, A4C1ED45F4E3CB3646C91B2D, 907048FBEAB0D9FC15FF9485,); path = WarrantyTracker; sourceTree = "<group>"; };
+		01A56490A3FF5797A24897C4 = { isa = PBXGroup; children = (E1157BD903F1F30B6426DD8D, 94FC6358B731981816001F76, DF728DEB4C7E8754D313EFDE, 190E86600B312C7DA50C282E, 653E119771985BAF324902C0, 3FF6E7D7C28A1567304E7414, B25918E9BF78135B777D6DA6, 26CC1C5ED8D424DFDF1A778E, CB6D7F59C698D185094EA30B, A0E629A9C81FD8F224806541, 90EDE5C9464CF3701597110F, 73F7024AD4730BD30A8BDB3B, AC27586DAB3DA9567AAD93F3, A4C1ED45F4E3CB3646C91B2D, 907048FBEAB0D9FC15FF9485,); path = WarrantyTracker; sourceTree = "<group>"; };
 		E337615E03BB8EED31B50E9F = { isa = PBXGroup; children = (482966011B6DA41BE9E2D31E,); path = WarrantyTrackerTests; sourceTree = "<group>"; };
 		C6E563D3D7C1BC284A64D1A5 = { isa = PBXGroup; children = (40E1A7EB813EF5CAFA85C0F4, 77E594EA1A903E02BB6E11B9,); path = WarrantyTrackerUITests; sourceTree = "<group>"; };
 		C542F1544998950D8E9C8FAF = { isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WarrantyTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -24,7 +48,7 @@
 		D40D75447E42BA4DDCD737DC = { isa = PBXBuildFile; fileRef = AC27586DAB3DA9567AAD93F3; };
 		E8C8BC7BA0760FDAF97E79B9 = { isa = PBXBuildFile; fileRef = A4C1ED45F4E3CB3646C91B2D; };
 		9629F9330D86A76241F522AE = { isa = PBXBuildFile; fileRef = 907048FBEAB0D9FC15FF9485; };
-		3781203C9E15722D4644BDBE = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (0E1DAB071A4C245125DA89E7, 5B11C92FBA7BDBF94C08E140, 07E00FC02F9BFC3C038785FF, 0CAF08E87FEF636FED3D488F, D40D75447E42BA4DDCD737DC, E8C8BC7BA0760FDAF97E79B9, 9629F9330D86A76241F522AE,); runOnlyForDeploymentPostprocessing = 0; };
+		3781203C9E15722D4644BDBE = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (85CE17E87CC8F5CE4CC83091, 7FAADB88B77B510A18D6FB51, 76CB2FC045C7A24F61167282, 3B19669463D0E690D6F7C24A, C53AAC25265F9F5ECCBBDD2E, ED0AA57D8BC815BFF8EBB3CE, 70EB7115145E86F76990EE01, 95FB3414279CFBC53AA1BFB5, 0E1DAB071A4C245125DA89E7, 5B11C92FBA7BDBF94C08E140, 07E00FC02F9BFC3C038785FF, 0CAF08E87FEF636FED3D488F, D40D75447E42BA4DDCD737DC, E8C8BC7BA0760FDAF97E79B9, 9629F9330D86A76241F522AE,); runOnlyForDeploymentPostprocessing = 0; };
 		8EF30EEDF88CF94167AC7FDD = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		6C6E0552BD6459D95CBACB38 = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		56099273A0B8AAAA9A7C0FB4 = { isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = WarrantyTracker; PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker; SDKROOT = iphoneos; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; SWIFT_STRICT_CONCURRENCY = complete; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 26.0; IPHONEOS_DEPLOYMENT_TARGET = 26.0; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1; ENABLE_USER_SCRIPT_SANDBOXING = YES; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/Frameworks"; PRODUCT_MODULE_NAME = WarrantyTracker; INFOPLIST_KEY_CFBundleDisplayName = WarrantyTracker; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity"; ENABLE_APP_SANDBOX = YES; ENABLE_HARDENED_RUNTIME = YES; TARGETED_DEVICE_FAMILY = 1; INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES; INFOPLIST_KEY_UILaunchScreen_Generation = YES; INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"; SUPPORTS_MACCATALYST = NO; SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; ENABLE_TESTABILITY = YES; }; name = Debug; };
@@ -39,7 +63,7 @@
 		A79A19E3665493BAA0DAE623 = { isa = PBXBuildFile; fileRef = AC27586DAB3DA9567AAD93F3; };
 		8B8E5324D8C92CA8119B1B73 = { isa = PBXBuildFile; fileRef = A4C1ED45F4E3CB3646C91B2D; };
 		D87556D56F4325A2D965E390 = { isa = PBXBuildFile; fileRef = 907048FBEAB0D9FC15FF9485; };
-		B511447645623DC7834062D4 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (CCB9E86ECA288B361F67B134, 3E2BEB47552C5D649F622591, AE555AF9B5A9D57BA0E13CD3, 8BB7EF70F607F27EF59C4FCF, A79A19E3665493BAA0DAE623, 8B8E5324D8C92CA8119B1B73, D87556D56F4325A2D965E390,); runOnlyForDeploymentPostprocessing = 0; };
+		B511447645623DC7834062D4 = { isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (212060B9C139A64F42B69A67, 8E497AC7A533390779B3E814, 67EDEAC275031786DD8C0048, E5072D6D37AEFACB8D6DF01F, 143D3BD458BAF23D3F4A3208, 629BB3041AE32D2623E91780, 51FC6CBD62F82B21C05A69D8, 8D3515C47673BDD87CCBF16C, CCB9E86ECA288B361F67B134, 3E2BEB47552C5D649F622591, AE555AF9B5A9D57BA0E13CD3, 8BB7EF70F607F27EF59C4FCF, A79A19E3665493BAA0DAE623, 8B8E5324D8C92CA8119B1B73, D87556D56F4325A2D965E390,); runOnlyForDeploymentPostprocessing = 0; };
 		BDAA36B122F4DFD4808521D7 = { isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		C335A8B28CEB81765F12D81F = { isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		051FE34E8AA5C64A8A7F5BB6 = { isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = WarrantyTracker; PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker; SDKROOT = macosx; SUPPORTED_PLATFORMS = "macosx"; GENERATE_INFOPLIST_FILE = YES; SWIFT_VERSION = 6.0; SWIFT_STRICT_CONCURRENCY = complete; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 26.0; IPHONEOS_DEPLOYMENT_TARGET = 26.0; MARKETING_VERSION = 0.1.0; CURRENT_PROJECT_VERSION = 1; ENABLE_USER_SCRIPT_SANDBOXING = YES; LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/Frameworks"; PRODUCT_MODULE_NAME = WarrantyTracker; INFOPLIST_KEY_CFBundleDisplayName = WarrantyTracker; INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity"; ENABLE_APP_SANDBOX = YES; ENABLE_HARDENED_RUNTIME = YES; SWIFT_OPTIMIZATION_LEVEL = "-Onone"; ENABLE_TESTABILITY = YES; }; name = Debug; };

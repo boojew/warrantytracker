@@ -55,18 +55,24 @@ enum WarrantySchemaV1: VersionedSchema {
     }
 }
 
-typealias Item = WarrantySchemaV1.Item
-typealias Coverage = WarrantySchemaV1.Coverage
-typealias Preferences = WarrantySchemaV1.Preferences
+// Keep V1 frozen: existing installations need this exact schema to migrate.
+typealias Item = WarrantySchemaV2.Item
+typealias Coverage = WarrantySchemaV2.Coverage
+typealias Preferences = WarrantySchemaV2.Preferences
+typealias CardAccount = WarrantySchemaV2.CardAccount
+typealias CardVersion = WarrantySchemaV2.CardVersion
+typealias Classification = WarrantySchemaV2.Classification
 
 enum WarrantyMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [WarrantySchemaV1.self] }
-    static var stages: [MigrationStage] { [] }
+    static var schemas: [any VersionedSchema.Type] { [WarrantySchemaV1.self, WarrantySchemaV2.self] }
+    static var stages: [MigrationStage] {
+        [.lightweight(fromVersion: WarrantySchemaV1.self, toVersion: WarrantySchemaV2.self)]
+    }
 }
 
 enum Persistence {
     static func container(url: URL? = nil, inMemory: Bool = false) throws -> ModelContainer {
-        let schema = Schema(versionedSchema: WarrantySchemaV1.self)
+        let schema = Schema(versionedSchema: WarrantySchemaV2.self)
         let configuration: ModelConfiguration
         if let url {
             configuration = ModelConfiguration("WarrantyTracker", schema: schema, url: url, cloudKitDatabase: .none)
