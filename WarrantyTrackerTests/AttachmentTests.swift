@@ -100,6 +100,17 @@ struct AttachmentProcessingTests {
         let rotated = try await MediaProcessor.shared.load(data: #require(pdf.dataRepresentation()))
         #expect(rotated.pages[0].image.width == 600)
         #expect(rotated.pages[0].image.height == 400)
+        #expect(try Self.brightness(rotated.pages[0].image, x: 80, y: 80) < 15)
+    }
+
+    @Test func imageOrientationIsNormalizedBeforeReview() async throws {
+        let data = NSMutableData()
+        let destination = try #require(CGImageDestinationCreateWithData(data, UTType.jpeg.identifier as CFString, 1, nil))
+        CGImageDestinationAddImage(destination, try Self.sampleImage(), [kCGImagePropertyOrientation: 6] as CFDictionary)
+        #expect(CGImageDestinationFinalize(destination))
+        let review = try await MediaProcessor.shared.load(data: data as Data)
+        #expect(review.pages[0].image.width == 300)
+        #expect(review.pages[0].image.height == 200)
     }
 
     @Test func unsupportedEmptyOversizedAndLongInputsAreRejected() async throws {

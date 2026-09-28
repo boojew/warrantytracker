@@ -156,7 +156,7 @@
 /* Begin PBXGroup section */
 		01A56490A3FF5797A24897C4 /* WarrantyTracker */ = {
 			isa = PBXGroup;
-			children = (6064E1E3DD8AD12C4E574BD6, 5762CA675A454212697856CB, 71A914EBAE27611D6CD4298E, 127CE2F6A39258948A79C8AD, DB29AD56B69741B1CDAB757F, 11B718E1BC8227B0370ABA33, 5ED9D667830FDE0A8742F661, 
+			children = (6064E1E3DD8AD12C4E574BD6, 5762CA675A454212697856CB, 71A914EBAE27611D6CD4298E, 127CE2F6A39258948A79C8AD, DB29AD56B69741B1CDAB757F, 11B718E1BC8227B0370ABA33, 5ED9D667830FDE0A8742F661,
 				E1157BD903F1F30B6426DD8D /* SettingsView.swift */,
 				94FC6358B731981816001F76 /* SchemaV2.swift */,
 				DF728DEB4C7E8754D313EFDE /* InventorySearch.swift */,
@@ -197,7 +197,7 @@
 		};
 		E337615E03BB8EED31B50E9F /* WarrantyTrackerTests */ = {
 			isa = PBXGroup;
-			children = (05E46E62FCA7B3404B12CFA3, 
+			children = (05E46E62FCA7B3404B12CFA3,
 				482966011B6DA41BE9E2D31E /* WarrantyTrackerTests.swift */,
 			);
 			path = WarrantyTrackerTests;
@@ -349,7 +349,7 @@
 		6C6E0552BD6459D95CBACB38 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (B02D872708646ED59DF3DCB9, 
+			files = (B02D872708646ED59DF3DCB9,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,7 +370,7 @@
 		C335A8B28CEB81765F12D81F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (5F65C61C1120C0A251EA1E34, 
+			files = (5F65C61C1120C0A251EA1E34,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,7 +380,7 @@
 		3781203C9E15722D4644BDBE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (BE2C0849463625CC1C5A0AE6, 85DD601A5D29600D6A21C21D, 706D0645BA305FD9CD2B1B14, D40FE2E28D41E96045FC0A4F, 9564A1B087B8F94B9E663C82, AE1F82B7FFF67493F1F597D9, 
+			files = (BE2C0849463625CC1C5A0AE6, 85DD601A5D29600D6A21C21D, 706D0645BA305FD9CD2B1B14, D40FE2E28D41E96045FC0A4F, 9564A1B087B8F94B9E663C82, AE1F82B7FFF67493F1F597D9,
 				85CE17E87CC8F5CE4CC83091 /* SettingsView.swift in Sources */,
 				7FAADB88B77B510A18D6FB51 /* SchemaV2.swift in Sources */,
 				76CB2FC045C7A24F61167282 /* InventorySearch.swift in Sources */,
@@ -410,7 +410,7 @@
 		AE502DC74BC5887F678ACFA6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (9692E298E205694404D11152, 
+			files = (9692E298E205694404D11152,
 				AC1CE108E44C45CBCCAB2721 /* WarrantyTrackerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,7 +418,7 @@
 		B511447645623DC7834062D4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (11F3922CB05CABCE28E94D78, E0DEEAB3E91501844E1A859A, 62ABDE443F9A3499F21463B3, 7E93287BA238A65169292749, 6475B26C663EA58488D1A4AE, 70215A8FBB8B3DFC52F8F7D7, 
+			files = (11F3922CB05CABCE28E94D78, E0DEEAB3E91501844E1A859A, 62ABDE443F9A3499F21463B3, 7E93287BA238A65169292749, 6475B26C663EA58488D1A4AE, 70215A8FBB8B3DFC52F8F7D7,
 				212060B9C139A64F42B69A67 /* SettingsView.swift in Sources */,
 				8E497AC7A533390779B3E814 /* SchemaV2.swift in Sources */,
 				67EDEAC275031786DD8C0048 /* InventorySearch.swift in Sources */,
@@ -468,7 +468,7 @@
 /* Begin XCBuildConfiguration section */
 		051FE34E8AA5C64A8A7F5BB6 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-macOS.entitlements"; 
+			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -516,7 +516,7 @@
 		};
 		56099273A0B8AAAA9A7C0FB4 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_NSCameraUsageDescription = "Take photos of items, receipts and serial numbers for your warranty inventory."; 
+			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_NSCameraUsageDescription = "Take photos of items, receipts and serial numbers for your warranty inventory.";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;
@@ -580,7 +580,7 @@
 		};
 		750A24A549F3633394FE7C3C /* Release */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-macOS.entitlements"; 
+			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-macOS.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -707,7 +707,7 @@
 		};
 		8F16555C789A897EC57655B1 /* Release */ = {
 			isa = XCBuildConfiguration;
-			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_NSCameraUsageDescription = "Take photos of items, receipts and serial numbers for your warranty inventory."; 
+			buildSettings = {ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_NSCameraUsageDescription = "Take photos of items, receipts and serial numbers for your warranty inventory.";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				ENABLE_APP_SANDBOX = YES;

@@ -2,6 +2,68 @@ import XCTest
 
 final class iOSInventoryUITests: XCTestCase {
     @MainActor
+    func testReceiptPhotoReview() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["--ui-test-store", UUID().uuidString]
+        app.launch()
+        XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 15))
+        app.buttons["emptyAddItem"].tap()
+        app.textFields["itemName"].tap(); app.textFields["itemName"].typeText("Test camera")
+        app.buttons["addReceipt"].tap()
+        XCTAssertTrue(app.buttons["choosePhoto"].waitForExistence(timeout: 5))
+        app.buttons["choosePhoto"].tap()
+        XCTAssertTrue(app.navigationBars["Photos"].waitForExistence(timeout: 5))
+        // Use a simulator with stock photos, or seed a synthetic image with simctl addmedia.
+        let photo = app.images["PXGGridLayout-Info"].firstMatch
+        XCTAssertTrue(photo.waitForExistence(timeout: 5), "Add a synthetic photo to the simulator before running this test.")
+        // Photos exposes its grid thumbnails as non-hittable images on this simulator.
+        photo.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
+        let canvas = app.images["redactionCanvas"]
+        XCTAssertTrue(canvas.waitForExistence(timeout: 15))
+        XCTAssertFalse(app.buttons["saveAttachment"].isEnabled)
+        app.descendants(matching: .any)["coverAreas"].tap()
+        canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.05))
+            .press(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.15)))
+        XCTAssertTrue(app.buttons["undoCover"].isEnabled)
+        let confirmation = app.switches["reviewConfirmed"]
+        confirmation.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
+        XCTAssertEqual(confirmation.value as? String, "1")
+        XCTAssertTrue(app.buttons["saveAttachment"].isEnabled)
+        let reviewShot = XCTAttachment(screenshot: app.screenshot())
+        reviewShot.name = "iPhone reviewed photo"; reviewShot.lifetime = .keepAlways; add(reviewShot)
+        app.buttons["saveAttachment"].tap()
+        XCTAssertTrue(app.buttons["choosePhoto"].waitForNonExistence(timeout: 10))
+        XCTAssertTrue(app.buttons["saveItem"].waitForExistence(timeout: 10))
+        app.buttons["saveItem"].tap()
+        XCTAssertTrue(app.buttons["saveItem"].waitForNonExistence(timeout: 10))
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.staticTexts["Test camera"].firstMatch.waitForExistence(timeout: 10))
+        app.staticTexts["Test camera"].firstMatch.tap()
+        if !app.buttons["itemAttachments"].isHittable { app.swipeUp() }
+        app.buttons["itemAttachments"].tap()
+        app.staticTexts["Receipt"].firstMatch.tap()
+        XCTAssertTrue(app.images["savedImage"].waitForExistence(timeout: 5))
+        app.buttons["useMainPhoto"].tap()
+        XCTAssertTrue(app.staticTexts["Main photo"].exists)
+        let savedShot = XCTAttachment(screenshot: app.screenshot())
+        savedShot.name = "iPhone saved photo"; savedShot.lifetime = .keepAlways; add(savedShot)
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.buttons["addAttachment"].tap()
+        XCTAssertTrue(app.buttons["takeAttachmentPhoto"].waitForExistence(timeout: 5))
+        app.buttons["takeAttachmentPhoto"].tap()
+        if app.alerts["Unable to import"].waitForExistence(timeout: 2) {
+            app.alerts.buttons["OK"].tap()
+        } else {
+            XCTAssertTrue(app.buttons["PhotoCapture"].waitForExistence(timeout: 5))
+            app.buttons["DismissImagePickerButton"].tap()
+            XCTAssertTrue(app.buttons["PhotoCapture"].waitForNonExistence(timeout: 5))
+        }
+        app.navigationBars["Add Attachment"].buttons["Cancel"].tap()
+        XCTAssertTrue(app.buttons["addAttachment"].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testCreateAndReopenPurchase() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
