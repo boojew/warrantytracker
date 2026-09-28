@@ -1,7 +1,7 @@
 import Foundation
 
 enum SearchField: String, CaseIterable, Identifiable {
-    case all, name, manufacturer, store, country, price, purchaseDate, serial, coverage, card, category, tags, location, notes
+    case all, name, manufacturer, store, country, price, purchaseDate, serial, coverage, card, category, tags, location, notes, attachments
     var id: String { rawValue }
     var label: String {
         switch self {
@@ -19,6 +19,7 @@ enum SearchField: String, CaseIterable, Identifiable {
         case .tags: "Tags"
         case .location: "Used in"
         case .notes: "Notes"
+        case .attachments: "Attachment names"
         }
     }
 }
@@ -49,6 +50,10 @@ enum InventorySearch {
         case .tags: return (item.tags ?? []).map(\.name)
         case .location: return [item.location?.name ?? ""]
         case .notes: return [item.notes]
+        case .attachments:
+            return ((item.attachments ?? []) + (item.coverages ?? []).flatMap { $0.attachments ?? [] }).flatMap {
+                [$0.title, AttachmentRole(rawValue: $0.role)?.label ?? $0.role]
+            }
         case .card: return cardValues(item.purchaseCard) + (item.coverages ?? []).flatMap { cardValues($0.cardVersion) }
         case .coverage:
             return (item.coverages ?? []).flatMap { coverage -> [String] in

@@ -10,6 +10,8 @@ struct ItemEditorView: View {
     @State private var draft: ItemDraft
     @State private var loadedDefaults = false
     @State private var errorMessage: String?
+    @State private var addingReceipt = false
+    @State private var pendingAttachments: [PreparedAttachment] = []
 
     init(item: Item? = nil, onSave: @escaping (UUID) -> Void = { _ in }) {
         self.item = item
@@ -23,6 +25,18 @@ struct ItemEditorView: View {
                 Section {
                     TextField("Item name", text: $draft.name)
                         .accessibilityIdentifier("itemName")
+                    if item == nil {
+                        Button("Add Receipt Photo or PDF", systemImage: "doc.viewfinder") { addingReceipt = true }
+                            .accessibilityIdentifier("addReceipt")
+                        ForEach(pendingAttachments) { attachment in
+                            HStack {
+                                Text(attachment.title)
+                                Spacer()
+                                Button("Remove", role: .destructive) { pendingAttachments.removeAll { $0.id == attachment.id } }
+                                    .buttonStyle(.borderless)
+                            }
+                        }
+                    }
                     TextField("Manufacturer", text: $draft.manufacturer)
                     TextField("Serial number", text: $draft.serialNumber)
                 } header: { Text("Item") } footer: { Text("Only the item name is required. You can fill in the rest later.") }
@@ -90,6 +104,9 @@ struct ItemEditorView: View {
         #if os(macOS)
         .frame(minWidth: 480, idealWidth: 540, minHeight: 640, idealHeight: 730)
         #endif
+        .sheet(isPresented: $addingReceipt) {
+            AttachmentImportView(defaultRole: .receipt, allowsItemPhoto: true) { pendingAttachments.append($0) }
+        }
         .interactiveDismissDisabled()
         .onAppear {
             if !loadedDefaults && item == nil { draft = ItemDraft(defaults: preferences.first) }
@@ -109,6 +126,7 @@ struct ItemEditorView: View {
             let savedItem = item ?? Item(name: draft.name)
             if item == nil { context.insert(savedItem) }
             try draft.apply(to: savedItem)
+            for attachment in pendingAttachments { AttachmentStore.insert(attachment, owner: .item(savedItem), in: context) }
             try context.save()
             onSave(savedItem.id)
             dismiss()

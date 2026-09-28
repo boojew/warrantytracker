@@ -16,11 +16,8 @@ struct ItemDetailView: View {
         Form {
             Section {
                 HStack(spacing: 16) {
-                    Image(systemName: "shippingbox.fill")
-                        .font(.largeTitle).foregroundStyle(.teal)
-                        .frame(width: 68, height: 68)
-                        .background(.teal.opacity(0.1), in: RoundedRectangle(cornerRadius: 16))
-                        .accessibilityHidden(true)
+                    AttachmentThumbnail(data: item.mainPhoto?.thumbnail)
+                        .frame(width: 68, height: 68).clipped()
                     VStack(alignment: .leading, spacing: 6) {
                         Text(item.name).font(.title2.bold()).textSelection(.enabled)
                         Text(item.manufacturer.isEmpty ? "Manufacturer not entered" : item.manufacturer)
@@ -47,6 +44,9 @@ struct ItemDetailView: View {
                 ForEach(item.orderedCoverages) { coverage in
                     VStack(alignment: .leading) {
                         CoverageSummary(coverage: coverage)
+                        NavigationLink {
+                            AttachmentsView(owner: .coverage(coverage))
+                        } label: { Label("Documents (\((coverage.attachments ?? []).count))", systemImage: "paperclip") }
                         HStack {
                             Button("Edit Coverage") { editingCoverage = coverage }
                             Spacer()
@@ -58,6 +58,11 @@ struct ItemDetailView: View {
                     .accessibilityIdentifier("addCoverage")
             } header: { Text("Warranty coverage") } footer: {
                 Text("Each plan is recorded separately. Dates and terms are entered by you; consult your policy documents to confirm coverage.")
+            }
+            Section("Photos & Documents") {
+                NavigationLink { AttachmentsView(owner: .item(item)) } label: {
+                    Label("Attachments (\((item.attachments ?? []).count))", systemImage: "photo.on.rectangle")
+                }.accessibilityIdentifier("itemAttachments")
             }
             Section("Organization") {
                 LabeledContent("Category", value: item.category?.name ?? "Not set")
@@ -94,7 +99,7 @@ struct ItemDetailView: View {
         .confirmationDialog("Delete \(item.name)?", isPresented: $confirmingDelete, titleVisibility: .visible) {
             Button("Delete Item", role: .destructive, action: delete)
             Button("Cancel", role: .cancel) {}
-        } message: { Text("This removes the item and its warranty records from this device.") }
+        } message: { Text("This removes the item, its warranty records, and their saved attachments from this device.") }
         .alert("Unable to delete", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {
             Button("OK", role: .cancel) {}
         } message: { Text(errorMessage ?? "") }

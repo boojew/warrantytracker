@@ -112,12 +112,8 @@ private struct ItemRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "shippingbox.fill")
-                .font(.title3)
-                .foregroundStyle(.teal)
-                .frame(width: 44, height: 48)
-                .background(.teal.opacity(0.10), in: RoundedRectangle(cornerRadius: 10))
-                .accessibilityHidden(true)
+            AttachmentThumbnail(data: item.mainPhoto?.thumbnail)
+                .frame(width: 44, height: 48).clipped()
             VStack(alignment: .leading, spacing: 4) {
                 Text(item.name).font(.headline)
                 if !item.retailer.isEmpty { Text(item.retailer).font(.subheadline).foregroundStyle(.secondary) }
