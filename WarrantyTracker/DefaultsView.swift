@@ -15,7 +15,7 @@ struct DefaultsView: View {
                 Text("These defaults apply to new items. Existing purchases keep their country and currency.")
             }
             Section("Storage") {
-                LabeledContent("Inventory", value: "On this device")
+                NavigationLink("Storage & Sync") { SyncSettingsView() }
             }
         }
         .formStyle(.grouped)
@@ -25,10 +25,11 @@ struct DefaultsView: View {
     }
 
     private func setting(_ keyPath: ReferenceWritableKeyPath<Preferences, String>, fallback: String) -> Binding<String> {
-        Binding(get: { preferences.first?[keyPath: keyPath] ?? fallback }, set: { value in
-            let settings = preferences.first ?? Preferences()
+        Binding(get: { SyncReconciliation.currentPreferences(preferences)?[keyPath: keyPath] ?? fallback }, set: { value in
+            let settings = SyncReconciliation.currentPreferences(preferences) ?? Preferences()
             if preferences.isEmpty { context.insert(settings) }
             settings[keyPath: keyPath] = value
+            settings.modifiedAt = Date()
             do { try context.save() } catch {
                 context.rollback()
                 errorMessage = error.localizedDescription

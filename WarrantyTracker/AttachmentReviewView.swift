@@ -11,7 +11,6 @@ struct AttachmentReviewView: View {
     @State private var zoom = 1.0
     @State private var covering = false
     @State private var saving = false
-    @State private var reviewed = false
     @State private var error: String?
 
     var body: some View {
@@ -34,7 +33,7 @@ struct AttachmentReviewView: View {
                     HStack {
                         Toggle("Cover areas", isOn: $covering).toggleStyle(.button)
                             .accessibilityIdentifier("coverAreas")
-                        Button("Undo cover") { _ = document.pages[pageIndex].redactions.popLast(); reviewed = false }
+                        Button("Undo cover") { _ = document.pages[pageIndex].redactions.popLast() }
                             .disabled(document.pages[pageIndex].redactions.isEmpty).accessibilityIdentifier("undoCover")
                         Spacer()
                     }
@@ -54,15 +53,13 @@ struct AttachmentReviewView: View {
                     ScrollView([.horizontal, .vertical]) {
                         let image = document.pages[pageIndex].image
                         let width = max(1, geometry.size.width - 24) * zoom
-                        RedactionCanvas(page: $document.pages[pageIndex], covering: covering) { reviewed = false }
+                        RedactionCanvas(page: $document.pages[pageIndex], covering: covering)
                             .id(document.pages[pageIndex].id)
                             .frame(width: width, height: width * CGFloat(image.height) / CGFloat(image.width))
                             .padding(12)
                     }
                     .background(.gray.opacity(0.12))
                 }
-                Toggle("I reviewed every page for sensitive information", isOn: $reviewed)
-                    .font(.footnote).padding(.horizontal).accessibilityIdentifier("reviewConfirmed")
                 Text(covering ? "Drag across the image to cover an area. Turn off Cover areas to scroll." : "Zoom in to check small text. Turn on Cover areas to draw black rectangles.")
                     .font(.caption).foregroundStyle(.secondary).padding(.horizontal)
             }
@@ -72,7 +69,7 @@ struct AttachmentReviewView: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() }.disabled(saving) }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(saving ? "Saving…" : "Use Reviewed Copy") { save() }
-                        .disabled(saving || !reviewed || title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                        .disabled(saving || title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         .accessibilityIdentifier("saveAttachment")
                 }
             }
@@ -102,7 +99,6 @@ struct AttachmentReviewView: View {
 private struct RedactionCanvas: View {
     @Binding var page: ReviewPage
     let covering: Bool
-    let changed: () -> Void
     @State private var dragRect: CGRect?
 
     var body: some View {
@@ -119,7 +115,7 @@ private struct RedactionCanvas: View {
                     dragRect = normalized(value, size: geometry.size)
                 }.onEnded { value in
                     let rect = normalized(value, size: geometry.size)
-                    if rect.width > 0.002 && rect.height > 0.002 { page.redactions.append(rect); changed() }
+                    if rect.width > 0.002 && rect.height > 0.002 { page.redactions.append(rect) }
                     dragRect = nil
                 }, including: covering ? .all : .none)
                 .accessibilityLabel("Attachment review image")

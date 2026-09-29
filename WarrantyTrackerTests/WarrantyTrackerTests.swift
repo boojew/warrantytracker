@@ -46,8 +46,7 @@ struct PersistenceTests {
             draft.manufacturer = "Example Manufacturer"
             draft.retailer = "Costco"
             draft.price = Money.editable("999.99")
-            draft.hasPurchaseDate = true
-            draft.purchaseDate = try #require(CalendarDay.decode("2026-09-27"))
+            draft.purchaseDate = CalendarDay.decode("2026-09-27")
             draft.hasWarrantyEnd = true
             draft.warrantyEnd = try #require(CalendarDay.decode("2028-09-27"))
             let item = Item(name: draft.name)
@@ -102,15 +101,13 @@ struct PersistenceTests {
         var draft = ItemDraft(item: item)
         draft.name = "Unsaved change"
         #expect(item.name == "Original")
-        draft.hasPurchaseDate = true
-        draft.purchaseDate = try #require(CalendarDay.decode("2026-09-27"))
+        draft.purchaseDate = CalendarDay.decode("2026-09-27")
         draft.hasWarrantyEnd = true
         draft.warrantyEnd = try #require(CalendarDay.decode("2025-09-27"))
         // Editing an item no longer edits its separate coverage records.
         try draft.validate()
         var newDraft = ItemDraft()
         newDraft.name = "New item"
-        newDraft.hasPurchaseDate = true
         newDraft.purchaseDate = draft.purchaseDate
         newDraft.hasWarrantyEnd = true
         newDraft.warrantyEnd = draft.warrantyEnd

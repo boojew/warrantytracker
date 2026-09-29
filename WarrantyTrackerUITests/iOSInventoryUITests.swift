@@ -2,6 +2,40 @@ import XCTest
 
 final class iOSInventoryUITests: XCTestCase {
     @MainActor
+    func testOptionalPurchaseDateAndLocalSyncStatus() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["--ui-test-store", UUID().uuidString]
+        app.launch()
+        XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 10))
+        app.buttons["emptyAddItem"].tap()
+        app.textFields["itemName"].tap(); app.textFields["itemName"].typeText("Optional date")
+        if !app.buttons["purchaseDate"].isHittable { app.swipeUp() }
+        app.buttons["purchaseDate"].tap()
+        XCTAssertTrue(app.buttons["setPurchaseDate"].waitForExistence(timeout: 5))
+        let calendarShot = XCTAttachment(screenshot: app.screenshot())
+        calendarShot.name = "Optional date calendar on iPhone"; calendarShot.lifetime = .keepAlways; add(calendarShot)
+        app.buttons["setPurchaseDate"].tap()
+        XCTAssertTrue(app.buttons["setPurchaseDate"].waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["clearPurchaseDate"].exists)
+        app.buttons["clearPurchaseDate"].tap()
+        XCTAssertFalse(app.buttons["clearPurchaseDate"].exists)
+        app.buttons["saveItem"].tap()
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.staticTexts["Optional date"].firstMatch.waitForExistence(timeout: 10))
+        app.staticTexts["Optional date"].firstMatch.tap()
+        app.buttons["editItem"].tap()
+        if !app.buttons["purchaseDate"].isHittable { app.swipeUp() }
+        XCTAssertFalse(app.buttons["clearPurchaseDate"].exists)
+        let shot = XCTAttachment(screenshot: app.screenshot())
+        shot.name = "Optional purchase date on iPhone"; shot.lifetime = .keepAlways; add(shot)
+        app.buttons["Cancel"].tap()
+        app.tabBars.buttons["Settings"].tap()
+        app.buttons["Storage & Sync"].tap()
+        XCTAssertTrue(app.staticTexts["iCloud is not enabled in this build. Your inventory stays on this device and remains available offline."].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testReceiptPhotoReview() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
@@ -21,15 +55,11 @@ final class iOSInventoryUITests: XCTestCase {
         photo.coordinate(withNormalizedOffset: CGVector(dx: 0.5, dy: 0.5)).tap()
         let canvas = app.images["redactionCanvas"]
         XCTAssertTrue(canvas.waitForExistence(timeout: 15))
-        XCTAssertFalse(app.buttons["saveAttachment"].isEnabled)
+        XCTAssertTrue(app.buttons["saveAttachment"].isEnabled)
         app.descendants(matching: .any)["coverAreas"].tap()
         canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.05))
             .press(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.8, dy: 0.15)))
         XCTAssertTrue(app.buttons["undoCover"].isEnabled)
-        let confirmation = app.switches["reviewConfirmed"]
-        confirmation.coordinate(withNormalizedOffset: CGVector(dx: 0.95, dy: 0.5)).tap()
-        XCTAssertEqual(confirmation.value as? String, "1")
-        XCTAssertTrue(app.buttons["saveAttachment"].isEnabled)
         let reviewShot = XCTAttachment(screenshot: app.screenshot())
         reviewShot.name = "iPhone reviewed photo"; reviewShot.lifetime = .keepAlways; add(reviewShot)
         app.buttons["saveAttachment"].tap()

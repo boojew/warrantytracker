@@ -98,8 +98,7 @@ struct ItemDraft {
     var countryCode = "CA"
     var currencyCode = "CAD"
     var price = ""
-    var hasPurchaseDate = false
-    var purchaseDate = Date()
+    var purchaseDate: Date?
     var serialNumber = ""
     var notes = ""
     var hasWarrantyEnd = false
@@ -128,7 +127,6 @@ struct ItemDraft {
         location = item.location
         tags = item.tags ?? []
         if let day = item.purchasedOn, let date = CalendarDay.decode(day) {
-            hasPurchaseDate = true
             purchaseDate = date
         }
         if let day = item.manufacturerCoverage?.endsOn, let date = CalendarDay.decode(day) {
@@ -140,7 +138,7 @@ struct ItemDraft {
     func validate() throws {
         guard !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { throw EntryError.missingName }
         _ = try Money.parse(price)
-        if createsInitialCoverage && hasPurchaseDate && hasWarrantyEnd && CalendarDay.encode(warrantyEnd) < CalendarDay.encode(purchaseDate) {
+        if createsInitialCoverage, let purchaseDate, hasWarrantyEnd, CalendarDay.encode(warrantyEnd) < CalendarDay.encode(purchaseDate) {
             throw EntryError.warrantyBeforePurchase
         }
     }
@@ -153,7 +151,7 @@ struct ItemDraft {
         item.countryCode = countryCode
         item.currencyCode = currencyCode
         item.priceAmount = try Money.parse(price)
-        item.purchasedOn = hasPurchaseDate ? CalendarDay.encode(purchaseDate) : nil
+        item.purchasedOn = purchaseDate.map { CalendarDay.encode($0) }
         item.serialNumber = serialNumber.trimmingCharacters(in: .whitespacesAndNewlines)
         item.notes = notes
         item.purchaseCard = purchaseCard

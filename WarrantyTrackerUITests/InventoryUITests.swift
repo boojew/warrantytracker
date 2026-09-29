@@ -4,6 +4,43 @@ import PDFKit
 
 final class InventoryUITests: XCTestCase {
     @MainActor
+    func testOptionalPurchaseDateAndLocalSyncStatus() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication()
+        app.launchArguments = ["--ui-test-store", UUID().uuidString]
+        app.launch(); app.activate()
+        XCTAssertTrue(app.buttons["emptyAddItem"].waitForExistence(timeout: 10))
+        app.typeKey("n", modifierFlags: .command)
+        app.textFields["itemName"].click(); app.textFields["itemName"].typeText("Optional date")
+        app.buttons["purchaseDate"].click()
+        XCTAssertTrue(app.buttons["setPurchaseDate"].waitForExistence(timeout: 5))
+        let calendarShot = XCTAttachment(screenshot: app.windows.firstMatch.screenshot())
+        calendarShot.name = "Optional date calendar on Mac"; calendarShot.lifetime = .keepAlways; add(calendarShot)
+        app.buttons["setPurchaseDate"].click()
+        XCTAssertTrue(app.buttons["setPurchaseDate"].waitForNonExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["clearPurchaseDate"].exists)
+        app.buttons["saveItem"].click()
+        app.terminate(); app.launch(); app.activate()
+        let row = app.outlines.buttons.matching(NSPredicate(format: "label CONTAINS %@", "Optional date")).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 10)); row.click()
+        app.buttons["editItem"].click()
+        XCTAssertTrue(app.buttons["clearPurchaseDate"].waitForExistence(timeout: 5))
+        app.buttons["clearPurchaseDate"].click()
+        XCTAssertFalse(app.buttons["clearPurchaseDate"].exists)
+        app.buttons["saveItem"].click()
+        app.buttons["editItem"].click()
+        XCTAssertTrue(app.buttons["purchaseDate"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["clearPurchaseDate"].exists)
+        let shot = XCTAttachment(screenshot: app.screenshot())
+        shot.name = "Optional purchase date on Mac"; shot.lifetime = .keepAlways; add(shot)
+        app.buttons["Cancel"].click()
+        app.typeKey(",", modifierFlags: .command)
+        app.radioButtons["General"].click()
+        app.buttons["Storage & Sync"].click()
+        XCTAssertTrue(app.staticTexts["iCloud is not enabled in this build. Your inventory stays on this device and remains available offline."].waitForExistence(timeout: 5))
+    }
+
+    @MainActor
     func testAddEditCancelRelaunchAndDelete() throws {
         continueAfterFailure = false
         let app = XCUIApplication()
@@ -141,12 +178,11 @@ final class InventoryUITests: XCTestCase {
         app.sheets["open-panel"].buttons["OKButton"].click()
         let canvas = app.images["redactionCanvas"]
         XCTAssertTrue(canvas.waitForExistence(timeout: 10))
-        XCTAssertFalse(app.buttons["saveAttachment"].isEnabled)
+        XCTAssertTrue(app.buttons["saveAttachment"].isEnabled)
         app.descendants(matching: .any)["coverAreas"].click()
         canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.05, dy: 0.05))
             .click(forDuration: 0.1, thenDragTo: canvas.coordinate(withNormalizedOffset: CGVector(dx: 0.6, dy: 0.13)))
         XCTAssertTrue(app.buttons["undoCover"].isEnabled)
-        app.checkBoxes["reviewConfirmed"].click()
         let reviewShot = XCTAttachment(screenshot: app.screenshot())
         reviewShot.name = "Receipt review with permanent cover"; reviewShot.lifetime = .keepAlways; add(reviewShot)
         app.buttons["saveAttachment"].click()
@@ -203,7 +239,6 @@ final class InventoryUITests: XCTestCase {
             app.buttons["Next page"].click()
             let indicator = app.staticTexts["pageIndicator"]
             XCTAssertTrue("\(indicator.label) \(indicator.value ?? "")".contains("Page 2 of 2"))
-            app.checkBoxes["reviewConfirmed"].click()
             app.buttons["saveAttachment"].click()
             XCTAssertTrue(app.buttons["saveItem"].waitForExistence(timeout: 10))
             app.buttons[shouldSave ? "saveItem" : "Cancel"].click()

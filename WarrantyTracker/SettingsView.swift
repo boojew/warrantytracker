@@ -23,6 +23,7 @@ struct SettingsView: View {
         .frame(width: 620, height: 600)
         #else
         List {
+            NavigationLink("Storage & Sync") { SyncSettingsView() }
             NavigationLink("Purchase defaults") { DefaultsView().navigationTitle("Purchase defaults") }
             NavigationLink("Credit Cards") { CardsView() }
             Section("Organization") { catalogLinks }
@@ -55,15 +56,14 @@ struct CatalogView: View {
 
     var body: some View {
         List {
-            ForEach(entries.filter { $0.kind == kind.rawValue && (showArchived || !$0.isArchived) }) { entry in
+            ForEach(SyncReconciliation.visible(entries).filter { $0.kind == kind.rawValue && (showArchived || !$0.isArchived) }) { entry in
                 HStack {
                     Button(entry.name + (entry.isArchived ? " (archived)" : "")) {
                         editing = entry; name = entry.name; showingEditor = true
                     }.buttonStyle(.plain)
                     Spacer()
                     Button(entry.isArchived ? "Restore" : "Archive") {
-                        entry.isArchived.toggle()
-                        do { try context.save() } catch { context.rollback(); self.error = error.localizedDescription }
+                        do { try Catalog.setArchived(!entry.isArchived, entry: entry, in: context) } catch { context.rollback(); self.error = error.localizedDescription }
                     }.buttonStyle(.borderless)
                 }
             }

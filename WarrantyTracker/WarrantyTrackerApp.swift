@@ -5,8 +5,16 @@ import SwiftData
 struct WarrantyTrackerApp: App {
     private let container: ModelContainer?
     private let startupError: String?
+    @State private var sync: SyncStatus
+    @Environment(\.scenePhase) private var scenePhase
+    #if os(iOS)
+    @UIApplicationDelegateAdaptor(SyncAppDelegate.self) private var delegate
+    #endif
 
     init() {
+        let isolated = ProcessInfo.processInfo.arguments.contains("--ui-test-store") || ProcessInfo.processInfo.environment["WARRANTYTRACKER_TEST_HOST"] == "1"
+        let mode = SyncMode.configured(isolated: isolated)
+        _sync = State(initialValue: SyncStatus(mode: mode))
         do {
             // UI tests use an isolated on-disk store; a relaunch tests real persistence.
             let arguments = ProcessInfo.processInfo.arguments
@@ -19,7 +27,7 @@ struct WarrantyTrackerApp: App {
             }
             // Hosted unit tests launch the app too. Keep their host away from real inventory.
             let isolatedTestHost = ProcessInfo.processInfo.environment["WARRANTYTRACKER_TEST_HOST"] == "1"
-            container = try Persistence.container(url: storeURL, inMemory: isolatedTestHost && storeURL == nil)
+            container = try Persistence.container(url: storeURL, inMemory: isolatedTestHost && storeURL == nil, sync: mode)
             startupError = nil
         } catch {
             container = nil
@@ -28,11 +36,21 @@ struct WarrantyTrackerApp: App {
     }
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup("WarrantyTracker", id: "inventory") {
             if let container {
                 InventoryView()
                     .modelContainer(container)
                     .tint(.teal)
+                    .environment(sync)
+                    .task {
+                        #if os(macOS)
+                        if sync.mode.isEnabled { NSApplication.shared.registerForRemoteNotifications() }
+                        #endif
+                        await sync.refreshAccount()
+                    }
+                    .onChange(of: scenePhase) { _, phase in
+                        if phase == .active { Task { await sync.refreshAccount() } }
+                    }
             } else {
                 ContentUnavailableView {
                     Label("Unable to open your inventory", systemImage: "externaldrive.badge.exclamationmark")
@@ -44,13 +62,30 @@ struct WarrantyTrackerApp: App {
         }
         #if os(macOS)
         .defaultSize(width: 1040, height: 720)
+        .defaultLaunchBehavior(.presented)
         #endif
         #if os(macOS)
         Settings {
             if let container {
-                SettingsView().modelContainer(container)
+                SettingsView().modelContainer(container).environment(sync)
             }
         }
         #endif
     }
+}
+
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+final class SyncAppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions options: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        if shouldRegisterForCloudNotifications { application.registerForRemoteNotifications() }
+        return true
+    }
+}
+#endif
+
+@MainActor private var shouldRegisterForCloudNotifications: Bool {
+    SyncMode.configured(isolated: ProcessInfo.processInfo.arguments.contains("--ui-test-store") || ProcessInfo.processInfo.environment["WARRANTYTRACKER_TEST_HOST"] == "1").isEnabled
 }

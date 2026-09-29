@@ -56,34 +56,43 @@ enum WarrantySchemaV1: VersionedSchema {
 }
 
 // Keep V1 frozen: existing installations need this exact schema to migrate.
-typealias Item = WarrantySchemaV3.Item
-typealias Coverage = WarrantySchemaV3.Coverage
-typealias Preferences = WarrantySchemaV3.Preferences
-typealias CardAccount = WarrantySchemaV3.CardAccount
-typealias CardVersion = WarrantySchemaV3.CardVersion
-typealias Classification = WarrantySchemaV3.Classification
+typealias Item = WarrantySchemaV4.Item
+typealias Coverage = WarrantySchemaV4.Coverage
+typealias Preferences = WarrantySchemaV4.Preferences
+typealias CardAccount = WarrantySchemaV4.CardAccount
+typealias CardVersion = WarrantySchemaV4.CardVersion
+typealias Classification = WarrantySchemaV4.Classification
 
-typealias Attachment = WarrantySchemaV3.Attachment
+typealias Attachment = WarrantySchemaV4.Attachment
 
 enum WarrantyMigrationPlan: SchemaMigrationPlan {
-    static var schemas: [any VersionedSchema.Type] { [WarrantySchemaV1.self, WarrantySchemaV2.self, WarrantySchemaV3.self] }
+    static var schemas: [any VersionedSchema.Type] { [WarrantySchemaV1.self, WarrantySchemaV2.self, WarrantySchemaV3.self, WarrantySchemaV4.self] }
     static var stages: [MigrationStage] {
         [.lightweight(fromVersion: WarrantySchemaV1.self, toVersion: WarrantySchemaV2.self),
-         .lightweight(fromVersion: WarrantySchemaV2.self, toVersion: WarrantySchemaV3.self)]
+         .lightweight(fromVersion: WarrantySchemaV2.self, toVersion: WarrantySchemaV3.self),
+         .lightweight(fromVersion: WarrantySchemaV3.self, toVersion: WarrantySchemaV4.self)]
     }
 }
 
 enum Persistence {
-    static func container(url: URL? = nil, inMemory: Bool = false) throws -> ModelContainer {
-        let schema = Schema(versionedSchema: WarrantySchemaV3.self)
-        let configuration: ModelConfiguration
+    static func configuration(url: URL? = nil, inMemory: Bool = false,
+                              sync: SyncMode = .local) -> ModelConfiguration {
+        let schema = Schema(versionedSchema: WarrantySchemaV4.self)
+        // Keeping the original configuration name and URL preserves existing stores and assets.
+        let cloud: ModelConfiguration.CloudKitDatabase
+        if case .privateCloud(let identifier) = sync, !inMemory { cloud = .private(identifier) }
+        else { cloud = .none }
         if let url {
-            configuration = ModelConfiguration("WarrantyTracker", schema: schema, url: url, cloudKitDatabase: .none)
-        } else {
-            configuration = ModelConfiguration("WarrantyTracker", schema: schema,
-                                               isStoredInMemoryOnly: inMemory, cloudKitDatabase: .none)
+            return ModelConfiguration("WarrantyTracker", schema: schema, url: url, cloudKitDatabase: cloud)
         }
-        return try ModelContainer(for: schema, migrationPlan: WarrantyMigrationPlan.self,
-                                  configurations: [configuration])
+        return ModelConfiguration("WarrantyTracker", schema: schema, isStoredInMemoryOnly: inMemory,
+                                  cloudKitDatabase: cloud)
+    }
+
+    static func container(url: URL? = nil, inMemory: Bool = false, sync: SyncMode = .local) throws -> ModelContainer {
+        let configuration = configuration(url: url, inMemory: inMemory, sync: sync)
+        if sync.isEnabled && !inMemory { try StoreBackup.beforeFirstCloudOpen(at: configuration.url) }
+        return try ModelContainer(for: Schema(versionedSchema: WarrantySchemaV4.self),
+                                  migrationPlan: WarrantyMigrationPlan.self, configurations: [configuration])
     }
 }

@@ -3,6 +3,7 @@ import SwiftData
 
 struct InventoryView: View {
     @Environment(\.modelContext) private var context
+    @Environment(SyncStatus.self) private var sync
     @State private var searchField: SearchField = .all
     @State private var error: String?
     @Query(sort: \Item.createdAt, order: .reverse) private var items: [Item]
@@ -41,7 +42,7 @@ struct InventoryView: View {
             }
             #endif
         }
-        .task {
+        .task(id: sync.importRevision) {
             do { try Catalog.initialize(in: context) } catch { context.rollback(); self.error = error.localizedDescription }
         }
         .formError($error, title: "Unable to load settings")

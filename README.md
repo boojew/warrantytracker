@@ -4,7 +4,9 @@ A native SwiftUI warranty inventory for iPhone and Mac. Development happens on `
 
 ## Current milestone
 
-Milestone 3: local inventory, independent warranties, card history, scoped search, and reviewed photos/PDFs. Canada/CAD defaults remain editable. Existing records upgrade automatically. Your supplied icon is included on iPhone and Mac. AI and iCloud sync come in later milestones.
+Milestone 4 implementation is prepared: private iCloud configurations, a storage-status screen, existing-store migration and a backup before the first cloud launch. Activation and real iPhone-to-Mac sync verification are pending a paid Apple Developer membership. Your normal schemes continue to use local storage and work with a free Personal Team. See [ICLOUD_SETUP.md](ICLOUD_SETUP.md) before using an iCloud scheme.
+
+Local inventory, independent warranties, card history, scoped search, and reviewed photos/PDFs are available now. Canada/CAD defaults remain editable. Your supplied icon is included on both platforms. Receipt OCR and AI suggestions are milestone 5.
 
 Requires iOS 26+ / macOS 26+ and Xcode 26+ with the appropriate SDK. Use current stable Xcode for everyday development. This first implementation is being verified with the already-installed Xcode 27 beta.
 
@@ -23,11 +25,19 @@ export DEVELOPER_DIR=/Applications/Xcode-beta.app/Contents/Developer
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac build
 ```
 
-## Verify milestone 3 yourself
+## Verify the latest changes yourself
+
+1. Use the usual **WarrantyTracker-macOS** or **WarrantyTracker-iOS** scheme and run the app. Keep using these schemes with your free Personal Team.
+2. Add an item and leave **Purchase date** blank; only the item name is required. Choose **Add date (optional)** to open the calendar, then **Set Date** to keep your choice. Use the × beside an entered date to clear it. Cancelling the calendar keeps the previous value.
+3. Save and reopen the item. A blank date stays blank, and an entered date stays saved. Cancelling the item editor discards unsaved changes.
+4. Import a receipt. The review screen now lets you save without a consent checkbox; the tools for covering sensitive areas remain available.
+5. Open **Settings → Storage & Sync** (Mac: **Settings → General → Storage & Sync**). Your normal build should say **On this device**.
+
+## Verify attachments
 
 1. Add an item. Directly below its name, choose **Add Receipt Photo or PDF**. On Mac use Photos or the file picker; on iPhone you can also take a photo.
 2. In the review screen, enter a useful attachment name and choose its purpose. Zoom to read small text. Turn on **Cover areas** and drag over any full card numbers, security codes or other sensitive information. Turn covering off to scroll. Use the arrows to review every PDF page.
-3. Check **I reviewed every page for sensitive information**, then choose **Use Reviewed Copy**. Save the item. Cancelling the item discards its pending attachments.
+3. Choose **Use Reviewed Copy**. No consent checkbox is required. Save the item. Cancelling the item discards its pending attachments.
 4. For an existing item, open **Photos & Documents → Attachments**. Add an item photo, serial-number photo and five or more extras. Open an image and choose **Use as Main Photo**; it should appear in the main inventory list.
 5. Under an individual warranty, open **Documents** to attach that plan's photos or PDFs. Those documents belong to that specific coverage record.
 6. Open an attachment to zoom/read it, edit its name/purpose, add further permanent covers, or delete it. Search by **Attachment names** to find its item (document contents are not searched yet).
@@ -35,7 +45,7 @@ xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -des
 
 Review is manual: the app does not detect sensitive numbers automatically or extract receipt/warranty information yet. It stores a newly rendered copy after review, with the covered pixels replaced and source image metadata removed. PDFs become image-only pages, so their original selectable text and editable annotations are not retained. Covers in a saved copy cannot be undone. Source files in Photos/Files remain unchanged.
 
-Files must be no larger than 30 MB. PDFs support up to 20 pages, subject to a total rendered-page limit of 32 million pixels. Images are reduced to at most 4,096 pixels on their longest side; PDFs render at up to 144 dpi and 2,400 pixels per page side. Check fine print, barcodes and setup codes for legibility before saving. Split a large PDF into smaller files if needed. Attachments use local device storage; iCloud sync is milestone 4.
+Files must be no larger than 30 MB. PDFs support up to 20 pages, subject to a total rendered-page limit of 32 million pixels. Images are reduced to at most 4,096 pixels on their longest side; PDFs render at up to 144 dpi and 2,400 pixels per page side. Check fine print, barcodes and setup codes for legibility before saving. Split a large PDF into smaller files if needed. Attachments use local device storage in the normal schemes; the separate iCloud schemes prepare them for private sync.
 
 ## Check the existing inventory features
 
@@ -61,12 +71,12 @@ Dates are calendar days, not timestamps. The entered end date is inclusive. Pric
 The Mac scheme includes Swift Testing checks for storage upgrades, purchase/warranty rules, attachment persistence and image/PDF processing, plus native UI workflows. The iOS scheme includes inventory, card/coverage and photo-review UI workflows. UI tests use separate on-disk stores so relaunch tests do not affect your inventory.
 
 ```sh
-xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac test
+xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-macOS -destination 'platform=macOS' -derivedDataPath build/mac-isolated WARRANTYTRACKER_TEST_BUNDLE_SUFFIX=.automation -parallel-testing-enabled NO test
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -destination 'generic/platform=iOS Simulator' -derivedDataPath build/ios CODE_SIGNING_ALLOWED=NO build
 xcodebuild -project WarrantyTracker.xcodeproj -scheme WarrantyTracker-iOS -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=26.0' -derivedDataPath build/ios -parallel-testing-enabled NO test
 ```
 
-UI tests may require permission for Xcode's test runner to control the Mac. Test stores are inside the app's local Application Support/UITests directory. Unit-test stores are temporary and removed by the tests; their host app uses a separate in-memory store.
+UI tests may require permission for Xcode's test runner to control the Mac. The Mac command above gives the test app its own `.automation` bundle identifier, so it does not compete with a development copy already running in Xcode. This optional command-line suffix is empty for normal builds and never changes your installed inventory's identity. Test stores are inside the app's local Application Support/UITests directory. Unit-test stores are temporary and removed by the tests; their host app uses a separate in-memory store.
 
 The iPhone photo UI test needs at least one synthetic or stock photo in the simulator library. To add one, run `xcrun simctl addmedia booted /path/to/synthetic-receipt.png` with the simulator booted. Do not use personal receipts for tests. Use a simulator device name and OS version installed on your Mac. An iOS 26.0 runtime and iPhone 17 Pro simulator were installed and used for this milestone. The Mac UI test also exercises Command-N to create an item.
 
@@ -77,7 +87,9 @@ The iPhone photo UI test needs at least one synthetic or stock photo in the simu
 - `WarrantyTrackerUITests/`: add/edit/cancel/relaunch/delete workflow.
 - `WarrantyTracker.xcodeproj/`: separate native iOS and macOS targets with shared source; no third-party dependencies.
 
-The database is local-only explicitly (`cloudKitDatabase: .none`). Optional inverse relationships and default values prepare it for CloudKit, but synchronization is not enabled merely by that preparation. Versioned schema changes must preserve user data.
+Normal schemes explicitly use local storage (`cloudKitDatabase: .none`). The separate `-iCloud` schemes use the **Cloud Debug** configuration and a private CloudKit container. Both modes keep the same store location and bundle identifier. V4 adds default-list identity and edit timestamps without changing earlier frozen schemas. The app makes a one-time backup, including external attachments, before opening an existing store with cloud sync enabled. This is a pre-sync snapshot, not a continuous backup.
+
+Tests always disable cloud access and use isolated stores. Do not switch an active synced inventory back and forth between local and cloud builds as a way to pause syncing; use the normal schemes until the paid-account setup and two-device checks are complete.
 
 ## Data hygiene
 

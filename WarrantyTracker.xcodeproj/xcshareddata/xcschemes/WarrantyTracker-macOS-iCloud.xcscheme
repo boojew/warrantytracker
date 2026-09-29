@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Scheme
+   LastUpgradeVersion = "2700"
+   version = "1.3">
+   <BuildAction
+      parallelizeBuildables = "YES"
+      buildImplicitDependencies = "YES">
+      <BuildActionEntries>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "33390A2066E27B7665DAF4D4"
+               BuildableName = "WarrantyTracker.app"
+               BlueprintName = "WarrantyTracker-macOS"
+               ReferencedContainer = "container:WarrantyTracker.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      shouldUseLaunchSchemeArgsEnv = "NO">
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "WARRANTYTRACKER_TEST_HOST"
+            value = "1"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
+      <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D81ECA06B328F466246D34A5"
+               BuildableName = "WarrantyTrackerTests.xctest"
+               BlueprintName = "WarrantyTrackerTests"
+               ReferencedContainer = "container:WarrantyTracker.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C7E11ABF6EBCC8FC0EE844E1"
+               BuildableName = "WarrantyTrackerUITests.xctest"
+               BlueprintName = "WarrantyTrackerUITests"
+               ReferencedContainer = "container:WarrantyTracker.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+      </Testables>
+   </TestAction>
+   <LaunchAction
+      buildConfiguration = "Cloud Debug"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      launchStyle = "0"
+      useCustomWorkingDirectory = "NO"
+      ignoresPersistentStateOnLaunch = "NO"
+      debugDocumentVersioning = "YES"
+      debugServiceExtension = "internal"
+      allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "33390A2066E27B7665DAF4D4"
+            BuildableName = "WarrantyTracker.app"
+            BlueprintName = "WarrantyTracker-macOS"
+            ReferencedContainer = "container:WarrantyTracker.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </LaunchAction>
+   <ProfileAction
+      buildConfiguration = "Cloud Debug"
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      savedToolIdentifier = ""
+      useCustomWorkingDirectory = "NO"
+      debugDocumentVersioning = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "33390A2066E27B7665DAF4D4"
+            BuildableName = "WarrantyTracker.app"
+            BlueprintName = "WarrantyTracker-macOS"
+            ReferencedContainer = "container:WarrantyTracker.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+   </ProfileAction>
+   <AnalyzeAction
+      buildConfiguration = "Cloud Debug">
+   </AnalyzeAction>
+   <ArchiveAction
+      buildConfiguration = "Cloud Debug"
+      revealArchiveInOrganizer = "YES">
+   </ArchiveAction>
+</Scheme>

@@ -52,12 +52,7 @@ struct ItemEditorView: View {
                         .keyboardType(.decimalPad)
                         #endif
                         .accessibilityIdentifier("price")
-                    Toggle("Purchase date known", isOn: $draft.hasPurchaseDate)
-                        .accessibilityIdentifier("purchaseDateKnown")
-                    if draft.hasPurchaseDate {
-                        DatePicker("Purchased on", selection: $draft.purchaseDate, displayedComponents: .date)
-                            .environment(\.calendar, Calendar(identifier: .gregorian))
-                    }
+                    OptionalPurchaseDateField(date: $draft.purchaseDate)
                 }
 
                 if item == nil {
@@ -109,7 +104,7 @@ struct ItemEditorView: View {
         }
         .interactiveDismissDisabled()
         .onAppear {
-            if !loadedDefaults && item == nil { draft = ItemDraft(defaults: preferences.first) }
+            if !loadedDefaults && item == nil { draft = ItemDraft(defaults: SyncReconciliation.currentPreferences(preferences)) }
             loadedDefaults = true
         }
         .alert("Unable to save", isPresented: Binding(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })) {

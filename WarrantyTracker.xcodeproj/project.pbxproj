@@ -5,6 +5,23 @@
 	};
 	objectVersion = 56;
 	objects = {
+		CAF0E5F5088F442133EC924E /* SchemaV4.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemaV4.swift; sourceTree = "<group>"; };
+		9B6E556644450EC72A99110C /* SchemaV4.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF0E5F5088F442133EC924E; };
+		EC083F732409609947C6310D /* SchemaV4.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF0E5F5088F442133EC924E; };
+		CF87CAE11AA469F8BB4E4D92 /* StoreBackup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreBackup.swift; sourceTree = "<group>"; };
+		C7E29997E97B1603529A3B70 /* StoreBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF87CAE11AA469F8BB4E4D92; };
+		7D3B72E81D7FE57FDFACE43E /* StoreBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF87CAE11AA469F8BB4E4D92; };
+		84F2501609E43D1113D23212 /* SyncStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncStatus.swift; sourceTree = "<group>"; };
+		A31FA8E538BB654D886F0629 /* SyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F2501609E43D1113D23212; };
+		52D1E4A11E48B952C842E7B1 /* SyncStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F2501609E43D1113D23212; };
+		CDB6A9461FB2396E6583C43A /* SyncSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncSettingsView.swift; sourceTree = "<group>"; };
+		BDF2A0A431053F8D3950BAE8 /* SyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A9461FB2396E6583C43A; };
+		1783FD2E819019DDA76B2E61 /* SyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDB6A9461FB2396E6583C43A; };
+		E8DBA7AB579546F708769914 /* SyncReconciliation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncReconciliation.swift; sourceTree = "<group>"; };
+		9D89E635D8BDAC0A63C73EAF /* SyncReconciliation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DBA7AB579546F708769914; };
+		CDCE21C26A019E934CAF7D0E /* SyncReconciliation.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8DBA7AB579546F708769914; };
+		1D18734DD793106B8851DE72 /* SyncTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncTests.swift; sourceTree = "<group>"; };
+		EA65B81ED3EFF73DD14711DD /* SyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D18734DD793106B8851DE72; };
 		05E46E62FCA7B3404B12CFA3 = { isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AttachmentTests.swift"; sourceTree = "<group>"; };
 		9692E298E205694404D11152 = { isa = PBXBuildFile; fileRef = 05E46E62FCA7B3404B12CFA3; };
 		6064E1E3DD8AD12C4E574BD6 = { isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
@@ -156,7 +173,12 @@
 /* Begin PBXGroup section */
 		01A56490A3FF5797A24897C4 /* WarrantyTracker */ = {
 			isa = PBXGroup;
-			children = (6064E1E3DD8AD12C4E574BD6, 5762CA675A454212697856CB, 71A914EBAE27611D6CD4298E, 127CE2F6A39258948A79C8AD, DB29AD56B69741B1CDAB757F, 11B718E1BC8227B0370ABA33, 5ED9D667830FDE0A8742F661,
+			children = (
+				E8DBA7AB579546F708769914 /* SyncReconciliation.swift */,
+				CDB6A9461FB2396E6583C43A /* SyncSettingsView.swift */,
+				84F2501609E43D1113D23212 /* SyncStatus.swift */,
+				CF87CAE11AA469F8BB4E4D92 /* StoreBackup.swift */,
+				CAF0E5F5088F442133EC924E /* SchemaV4.swift */,6064E1E3DD8AD12C4E574BD6, 5762CA675A454212697856CB, 71A914EBAE27611D6CD4298E, 127CE2F6A39258948A79C8AD, DB29AD56B69741B1CDAB757F, 11B718E1BC8227B0370ABA33, 5ED9D667830FDE0A8742F661,
 				E1157BD903F1F30B6426DD8D /* SettingsView.swift */,
 				94FC6358B731981816001F76 /* SchemaV2.swift */,
 				DF728DEB4C7E8754D313EFDE /* InventorySearch.swift */,
@@ -197,7 +219,8 @@
 		};
 		E337615E03BB8EED31B50E9F /* WarrantyTrackerTests */ = {
 			isa = PBXGroup;
-			children = (05E46E62FCA7B3404B12CFA3,
+			children = (
+				1D18734DD793106B8851DE72 /* SyncTests.swift */,05E46E62FCA7B3404B12CFA3,
 				482966011B6DA41BE9E2D31E /* WarrantyTrackerTests.swift */,
 			);
 			path = WarrantyTrackerTests;
@@ -380,7 +403,12 @@
 		3781203C9E15722D4644BDBE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (BE2C0849463625CC1C5A0AE6, 85DD601A5D29600D6A21C21D, 706D0645BA305FD9CD2B1B14, D40FE2E28D41E96045FC0A4F, 9564A1B087B8F94B9E663C82, AE1F82B7FFF67493F1F597D9,
+			files = (
+				9D89E635D8BDAC0A63C73EAF /* SyncReconciliation.swift in Sources */,
+				BDF2A0A431053F8D3950BAE8 /* SyncSettingsView.swift in Sources */,
+				A31FA8E538BB654D886F0629 /* SyncStatus.swift in Sources */,
+				C7E29997E97B1603529A3B70 /* StoreBackup.swift in Sources */,
+				9B6E556644450EC72A99110C /* SchemaV4.swift in Sources */,BE2C0849463625CC1C5A0AE6, 85DD601A5D29600D6A21C21D, 706D0645BA305FD9CD2B1B14, D40FE2E28D41E96045FC0A4F, 9564A1B087B8F94B9E663C82, AE1F82B7FFF67493F1F597D9,
 				85CE17E87CC8F5CE4CC83091 /* SettingsView.swift in Sources */,
 				7FAADB88B77B510A18D6FB51 /* SchemaV2.swift in Sources */,
 				76CB2FC045C7A24F61167282 /* InventorySearch.swift in Sources */,
@@ -410,7 +438,8 @@
 		AE502DC74BC5887F678ACFA6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (9692E298E205694404D11152,
+			files = (
+				EA65B81ED3EFF73DD14711DD /* SyncTests.swift in Sources */,9692E298E205694404D11152,
 				AC1CE108E44C45CBCCAB2721 /* WarrantyTrackerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,7 +447,12 @@
 		B511447645623DC7834062D4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
-			files = (11F3922CB05CABCE28E94D78, E0DEEAB3E91501844E1A859A, 62ABDE443F9A3499F21463B3, 7E93287BA238A65169292749, 6475B26C663EA58488D1A4AE, 70215A8FBB8B3DFC52F8F7D7,
+			files = (
+				CDCE21C26A019E934CAF7D0E /* SyncReconciliation.swift in Sources */,
+				1783FD2E819019DDA76B2E61 /* SyncSettingsView.swift in Sources */,
+				52D1E4A11E48B952C842E7B1 /* SyncStatus.swift in Sources */,
+				7D3B72E81D7FE57FDFACE43E /* StoreBackup.swift in Sources */,
+				EC083F732409609947C6310D /* SchemaV4.swift in Sources */,11F3922CB05CABCE28E94D78, E0DEEAB3E91501844E1A859A, 62ABDE443F9A3499F21463B3, 7E93287BA238A65169292749, 6475B26C663EA58488D1A4AE, 70215A8FBB8B3DFC52F8F7D7,
 				212060B9C139A64F42B69A67 /* SettingsView.swift in Sources */,
 				8E497AC7A533390779B3E814 /* SchemaV2.swift in Sources */,
 				67EDEAC275031786DD8C0048 /* InventorySearch.swift in Sources */,
@@ -487,7 +521,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.boojew.warrantytracker$(WARRANTYTRACKER_TEST_BUNDLE_SUFFIX)";
 				PRODUCT_MODULE_NAME = WarrantyTracker;
 				PRODUCT_NAME = WarrantyTracker;
 				SDKROOT = macosx;
@@ -537,7 +571,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.boojew.warrantytracker$(WARRANTYTRACKER_TEST_BUNDLE_SUFFIX)";
 				PRODUCT_MODULE_NAME = WarrantyTracker;
 				PRODUCT_NAME = WarrantyTracker;
 				SDKROOT = iphoneos;
@@ -598,7 +632,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.boojew.warrantytracker$(WARRANTYTRACKER_TEST_BUNDLE_SUFFIX)";
 				PRODUCT_MODULE_NAME = WarrantyTracker;
 				PRODUCT_NAME = WarrantyTracker;
 				SDKROOT = macosx;
@@ -727,7 +761,7 @@
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 0.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.boojew.warrantytracker$(WARRANTYTRACKER_TEST_BUNDLE_SUFFIX)";
 				PRODUCT_MODULE_NAME = WarrantyTracker;
 				PRODUCT_NAME = WarrantyTracker;
 				SDKROOT = iphoneos;
@@ -825,6 +859,196 @@
 			};
 			name = Release;
 		};
+		62CBA04983A7C6E32BAC5955 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-macOS-iCloud.entitlements";
+				INFOPLIST_FILE = "WarrantyTracker/macOS-Cloud-Info.plist";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WarrantyTracker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_MODULE_NAME = WarrantyTracker;
+				PRODUCT_NAME = WarrantyTracker;
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Cloud Debug";
+		};
+		F6DE82D8BE700C64B9412A21 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker.iosuitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = "WarrantyTracker-iOS";
+			};
+			name = "Cloud Debug";
+		};
+		17C31686CB81ABA5F0001722 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "WarrantyTracker/WarrantyTracker-iOS-iCloud.entitlements";
+				INFOPLIST_FILE = "WarrantyTracker/iOS-Cloud-Info.plist";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon; INFOPLIST_KEY_NSCameraUsageDescription = "Take photos of items, receipts and serial numbers for your warranty inventory.";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = WarrantyTracker;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker;
+				PRODUCT_MODULE_NAME = WarrantyTracker;
+				PRODUCT_NAME = WarrantyTracker;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = "Cloud Debug";
+		};
+		EC2B85015B93F27C47B32EF0 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WarrantyTracker.app/Contents/MacOS/WarrantyTracker";
+			};
+			name = "Cloud Debug";
+		};
+		5C40F22DAB4D4BD30BA001F1 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) DEBUG";
+				SWIFT_VERSION = 6.0;
+			};
+			name = "Cloud Debug";
+		};
+		AFB6F7DB741B78CA9A0215D0 /* Cloud Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.boojew.warrantytracker.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SUPPORTED_PLATFORMS = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_VERSION = 6.0;
+				TEST_TARGET_NAME = "WarrantyTracker-macOS";
+			};
+			name = "Cloud Debug";
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -832,6 +1056,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				051FE34E8AA5C64A8A7F5BB6 /* Debug */,
+				62CBA04983A7C6E32BAC5955 /* Cloud Debug */,
 				750A24A549F3633394FE7C3C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -841,6 +1066,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CA9DA3477F990CC0D76B027B /* Debug */,
+				AFB6F7DB741B78CA9A0215D0 /* Cloud Debug */,
 				8938A7CF6338AB46BE5D009A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -850,6 +1076,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				89E1FD6268CC0F221A2BE178 /* Debug */,
+				5C40F22DAB4D4BD30BA001F1 /* Cloud Debug */,
 				E6DE6C99132752C914FEF632 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -859,6 +1086,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8616C6278C13915B359267D8 /* Debug */,
+				EC2B85015B93F27C47B32EF0 /* Cloud Debug */,
 				6CDB59B229DEF90EBBE1EB17 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -868,6 +1096,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				34CCDD3076AF004341A31BDD /* Debug */,
+				F6DE82D8BE700C64B9412A21 /* Cloud Debug */,
 				CC786B508E0829BF34064933 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -877,6 +1106,7 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				56099273A0B8AAAA9A7C0FB4 /* Debug */,
+				17C31686CB81ABA5F0001722 /* Cloud Debug */,
 				8F16555C789A897EC57655B1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;

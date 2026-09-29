@@ -1,6 +1,57 @@
 import SwiftUI
 import SwiftData
 
+struct OptionalPurchaseDateField: View {
+    @Binding var date: Date?
+    @State private var choosingDate = false
+    @State private var proposedDate = Date()
+
+    var body: some View {
+        HStack {
+            Text("Purchase date")
+            Spacer()
+            Button {
+                proposedDate = date ?? Date()
+                choosingDate = true
+            } label: {
+                if let date { Text(date, format: .dateTime.year().month().day()) }
+                else { Text("Add date (optional)").foregroundStyle(.secondary) }
+            }.accessibilityIdentifier("purchaseDate")
+            if date != nil {
+                Button("Clear purchase date", systemImage: "xmark.circle.fill") { date = nil }
+                    .labelStyle(.iconOnly).buttonStyle(.borderless)
+                    .accessibilityIdentifier("clearPurchaseDate")
+            }
+        }
+        .sheet(isPresented: $choosingDate) {
+            NavigationStack {
+                ScrollView {
+                    DatePicker("Purchased on", selection: $proposedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                        .environment(\.calendar, Calendar(identifier: .gregorian))
+                        .padding()
+                }
+                .navigationTitle("Purchase date")
+                #if os(iOS)
+                .navigationBarTitleDisplayMode(.inline)
+                #endif
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) { Button("Cancel") { choosingDate = false } }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Set Date") { date = proposedDate; choosingDate = false }
+                            .accessibilityIdentifier("setPurchaseDate")
+                    }
+                }
+            }
+            #if os(macOS)
+            .frame(width: 380, height: 360)
+            #else
+            .presentationDetents([.large])
+            #endif
+        }
+    }
+}
+
 extension View {
     func formError(_ error: Binding<String?>, title: String = "Unable to save") -> some View {
         alert(title, isPresented: Binding(get: { error.wrappedValue != nil }, set: { if !$0 { error.wrappedValue = nil } })) {
@@ -35,7 +86,7 @@ struct ClassificationPicker: View {
     var body: some View {
         Picker(title, selection: Binding<UUID?>(get: { selection?.id }, set: { id in selection = entries.first { $0.id == id } })) {
             Text("Not set").tag(nil as UUID?)
-            ForEach(entries.filter { $0.kind == kind.rawValue && (!$0.isArchived || $0.id == selection?.id) }) { entry in
+            ForEach(SyncReconciliation.visible(entries, keeping: selection.map { [$0] } ?? []).filter { $0.kind == kind.rawValue && (!$0.isArchived || $0.id == selection?.id) }) { entry in
                 Text(entry.name + (entry.isArchived ? " (archived)" : "")).tag(Optional(entry.id))
             }
         }
@@ -48,11 +99,11 @@ struct TagPicker: View {
 
     var body: some View {
         List {
-            ForEach(entries.filter { $0.kind == "tag" && (!$0.isArchived || selection.contains($0)) }) { entry in
+            ForEach(SyncReconciliation.visible(entries, keeping: selection).filter { $0.kind == "tag" && (!$0.isArchived || selection.contains($0)) }) { entry in
                 Toggle(entry.name + (entry.isArchived ? " (archived)" : ""), isOn: Binding(get: {
-                    selection.contains { $0.id == entry.id }
+                    selection.contains { SyncReconciliation.key($0) == SyncReconciliation.key(entry) }
                 }, set: { enabled in
-                    selection.removeAll { $0.id == entry.id }
+                    selection.removeAll { SyncReconciliation.key($0) == SyncReconciliation.key(entry) }
                     if enabled { selection.append(entry) }
                 }))
             }

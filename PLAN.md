@@ -2,7 +2,7 @@
 
 Native iPhone and Mac app, iOS/macOS 26 minimum, English UI first. Default Canada/CAD with editable per-purchase country/currency. Public App Store distribution is the eventual goal. Local storage and private iCloud are the only planned hosted inventory storage; no custom server or third-party AI service.
 
-Milestones 1–3 are implemented. See `VERIFICATION.md` for checks and `README.md` for the hands-on verification steps. Stop here for hands-on review. Milestone 4 (private iCloud sync) is next, after approval.
+Milestones 1–3 are implemented. Milestone 4 code and local checks are prepared, but activation and real two-device acceptance are pending: the developer currently uses a free Personal Team. Normal schemes stay local and runnable. See `ICLOUD_SETUP.md` for the paid-account setup and remaining acceptance checks, `VERIFICATION.md` for evidence, and `README.md` for hands-on steps. Stop at this boundary; milestone 5 needs a separate go-ahead. The first synced MVP is not yet accepted.
 
 ## Milestones
 
